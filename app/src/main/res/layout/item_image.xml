@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="item"
+            type="com.betasoft.appdemo.data.api.responseremote.Item" />
+        <import type="android.view.View" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/rootLayout"
+        android:layout_margin="8dp"
+        android:layout_width="match_parent"
+        app:strokeColor="#BFC6DC"
+        app:strokeWidth="0.75dp"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgAvatar"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:loadAvatarByUrl="@{item.userProfile.avatar}"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_width="50dp"
+                android:layout_height="50dp"/>
+
+            <TextView
+                android:id="@+id/tvName"
+                app:layout_constraintTop_toTopOf="@id/imgAvatar"
+                app:layout_constraintBottom_toBottomOf="@id/imgAvatar"
+                app:layout_constraintStart_toEndOf="@id/imgAvatar"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="10dp"
+                android:gravity="start"
+                android:text="@{item.userProfile.name}"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgRoot"
+                app:layout_constraintTop_toBottomOf="@id/imgAvatar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:loadAvatarByUrl="@{item.image_url}"
+                app:layout_constraintDimensionRatio="1:1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
+
+            <TextView
+                android:id="@+id/tvPrompt"
+                app:layout_constraintTop_toBottomOf="@id/imgRoot"
+                android:layout_marginTop="10dp"
+                android:paddingHorizontal="10dp"
+                android:text="@{item.prompt}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>
