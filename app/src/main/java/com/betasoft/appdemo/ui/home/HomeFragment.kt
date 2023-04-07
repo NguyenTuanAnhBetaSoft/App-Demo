@@ -1,10 +1,11 @@
 package com.betasoft.appdemo.ui.home
 
-import android.view.View
+import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.betasoft.appdemo.R
+import com.betasoft.appdemo.data.api.responseremote.ItemsItem
 import com.betasoft.appdemo.data.response.DataResponse
 import com.betasoft.appdemo.data.response.LoadingStatus
 import com.betasoft.appdemo.databinding.FragmentHomeBinding
@@ -54,9 +55,8 @@ class HomeFragment : AbsBaseFragment<FragmentHomeBinding>() {
                 }
                 if (it.loadingStatus == LoadingStatus.Success) {
                     val body = (it as DataResponse.DataSuccess).body
-                        imageAdapter.update(false,body.items)
-                    Timber.e("body = ${body.toString()}")
-                        //binding.rV.unVeil()
+                    imageAdapter.update(false, body.items as List<ItemsItem>?)
+                    Log.d("dfadsf", "body = $body")
 
                 }
                 if (it.loadingStatus == LoadingStatus.Error) {

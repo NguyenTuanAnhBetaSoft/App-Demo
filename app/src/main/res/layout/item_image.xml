@@ -5,7 +5,7 @@
     <data>
         <variable
             name="item"
-            type="com.betasoft.appdemo.data.api.responseremote.Item" />
+            type="com.betasoft.appdemo.data.api.responseremote.ItemsItem" />
         <import type="android.view.View" />
 
     </data>
@@ -49,7 +49,7 @@
                 app:layout_constraintTop_toBottomOf="@id/imgAvatar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:loadAvatarByUrl="@{item.image_url}"
+
                 app:layout_constraintDimensionRatio="1:1"
                 android:layout_width="0dp"
                 android:layout_height="0dp"/>

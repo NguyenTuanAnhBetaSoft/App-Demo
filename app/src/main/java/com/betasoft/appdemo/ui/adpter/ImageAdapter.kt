@@ -1,17 +1,20 @@
 package com.betasoft.appdemo.ui.adpter
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.betasoft.appdemo.data.api.responseremote.Item
+import com.betasoft.appdemo.data.api.responseremote.DataResponseRemote
+import com.betasoft.appdemo.data.api.responseremote.ItemsItem
 import com.betasoft.appdemo.databinding.ItemImageBinding
 
 class ImageAdapter :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    val data = mutableListOf<Item>()
+    val data = mutableListOf<ItemsItem>()
     @SuppressLint("NotifyDataSetChanged")
-    fun update(isAddMore: Boolean, newData: List<Item>?) {
+    fun update(isAddMore: Boolean, newData: List<ItemsItem>?) {
+        Log.d("ffsdf", "items = ${newData.toString()}")
         if (isAddMore) {
             val oldSize = data.size
             if (newData != null && newData.isNotEmpty()) {
