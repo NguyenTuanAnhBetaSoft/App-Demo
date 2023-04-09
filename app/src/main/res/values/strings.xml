@@ -2,4 +2,12 @@
     <string name="app_name">App Demo</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello">Hello</string>
+    <string name="app_demo">App Demo</string>
+    <string name="my_file">My file</string>
+    <string name="home">Home</string>
+    <string name="crown">Crown</string>
+    <string name="ad">AD</string>
+    <string name="setting">Setting</string>
+    <string name="loading">Loading</string>
 </resources>

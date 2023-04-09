@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="AppCompatResource">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/openArtFragment"
+            android:enabled="true"
+            android:icon="@drawable/ic_home"
+            android:title="@string/home" />
+
+        <item
+            android:id="@+id/myFileFragment"
+            android:enabled="true"
+            android:icon="@drawable/ic_file"
+            android:title="@string/my_file" />
+
+        <item
+            android:id="@+id/myFileFragment2"
+            android:enabled="true"
+            android:icon="@drawable/ic_trending"
+            android:title="Test" />
+
+        <item
+            android:id="@+id/myFileFragment3"
+            android:enabled="true"
+            android:icon="@drawable/ic_explore"
+            android:title="Test" />
+    </group>
+
+</menu>

@@ -1,4 +1,4 @@
-package com.betasoft.appdemo.ui.home
+package com.betasoft.appdemo.ui.openart
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData

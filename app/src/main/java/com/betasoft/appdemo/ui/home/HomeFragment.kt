@@ -1,72 +1,86 @@
 package com.betasoft.appdemo.ui.home
 
-import android.util.Log
-import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
 import com.betasoft.appdemo.R
-import com.betasoft.appdemo.data.api.responseremote.ItemsItem
-import com.betasoft.appdemo.data.response.DataResponse
-import com.betasoft.appdemo.data.response.LoadingStatus
 import com.betasoft.appdemo.databinding.FragmentHomeBinding
-import com.betasoft.appdemo.ui.adpter.ImageAdapter
 import com.betasoft.appdemo.ui.base.AbsBaseFragment
-import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
+import com.betasoft.appdemo.ui.myfile.MyFileFragment
+import com.betasoft.appdemo.ui.openart.OpenArtFragment
 
-@AndroidEntryPoint
 class HomeFragment : AbsBaseFragment<FragmentHomeBinding>() {
-
-    private val mViewModel: HomeViewModel by viewModels()
-
-    private lateinit var mLayoutManager: GridLayoutManager
-
-    private val imageAdapter by lazy {
-        ImageAdapter()
-
-    }
-
     override fun getLayout(): Int {
         return R.layout.fragment_home
     }
 
     override fun initView() {
-        mViewModel.fetchImageList()
-        observer()
-        initRecycleView()
-    }
-
-    private fun initRecycleView() {
-        mLayoutManager = GridLayoutManager(requireContext(), 2, LinearLayoutManager.VERTICAL, false)
-        binding.rV.apply {
-            setHasFixedSize(true)
-            adapter = imageAdapter
-            layoutManager = mLayoutManager
-
-        }
+        initViewPager()
+        onBackPressed()
 
     }
 
-    private fun observer() {
-        mViewModel.dataAppLiveData.observe(this) {
-            it?.let {
-                if (it.loadingStatus == LoadingStatus.Loading) {
-
-                }
-                if (it.loadingStatus == LoadingStatus.Success) {
-                    val body = (it as DataResponse.DataSuccess).body
-                    imageAdapter.update(false, body.items as List<ItemsItem>?)
-                    Log.d("dfadsf", "body = $body")
-
-                }
-                if (it.loadingStatus == LoadingStatus.Error) {
-
-                } else {
+    private fun initViewPager() {
+        // Define fragments to display in viewPager2
+        val listOfFragments = arrayListOf<Fragment>(
+            OpenArtFragment(),
+            MyFileFragment(),
+            MyFileFragment(),
+            MyFileFragment()
+        )
+        binding.viewPager.adapter =
+            ViewPagerHomeAdapter(listOfFragments, childFragmentManager, lifecycle)
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                when (position) {
+                    0 -> binding.bottomNavigation.menu.findItem(R.id.openArtFragment).isChecked =
+                        true
+                    1 -> binding.bottomNavigation.menu.findItem(R.id.myFileFragment).isChecked =
+                        true
+                    2 -> binding.bottomNavigation.menu.findItem(R.id.myFileFragment2).isChecked =
+                        true
+                    3 -> binding.bottomNavigation.menu.findItem(R.id.myFileFragment3).isChecked =
+                        true
 
                 }
             }
-        }
+        })
 
+        // Listen bottom navigation tabs change
+        binding.bottomNavigation.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.openArtFragment -> {
+                    binding.viewPager.setCurrentItem(0, true)
+                    return@setOnItemSelectedListener true
+
+                }
+                R.id.myFileFragment -> {
+                    binding.viewPager.setCurrentItem(1, true)
+                    return@setOnItemSelectedListener true
+                }
+                R.id.myFileFragment2 -> {
+                    binding.viewPager.setCurrentItem(2, true)
+                    return@setOnItemSelectedListener true
+                }
+                R.id.myFileFragment3 -> {
+                    binding.viewPager.setCurrentItem(3, true)
+                    return@setOnItemSelectedListener true
+                }
+            }
+            return@setOnItemSelectedListener false
+        }
     }
+
+    private fun onBackPressed() {
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().finish()
+            }
+
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+    }
+
 
 }
