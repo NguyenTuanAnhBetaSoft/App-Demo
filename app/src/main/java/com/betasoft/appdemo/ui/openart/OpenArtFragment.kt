@@ -1,5 +1,6 @@
 package com.betasoft.appdemo.ui.openart
 
+import android.content.Context
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -13,6 +14,7 @@ import com.betasoft.appdemo.databinding.FragmentOpenArtBinding
 import com.betasoft.appdemo.ui.adpter.ImageAdapter
 import com.betasoft.appdemo.ui.base.AbsBaseFragment
 import com.betasoft.appdemo.ui.home.HomeFragmentDirections
+import com.betasoft.appdemo.utils.ToastUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,9 +35,13 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
                 override fun onClickedItem(param: ItemsItem) {
                     findNavController().navigate(
                         HomeFragmentDirections.actionGlobalDetailImageFragment(
-                            param.image_url.toString()
+                            param.image_url.toString(), param.id.toString()
                         )
                     )
+                }
+
+                override fun conClickedDownload(param: ItemsItem) {
+                    downLoadImageUrl(param.image_url.toString(), param.image_url.toString(), true, requireContext())
                 }
 
             }
@@ -90,6 +96,25 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
             }
         }
 
+        mViewModel.downloadImageLiveData.observe(this) {
+            it.let {
+                if (it.loadingStatus == LoadingStatus.Success) {
+                    ToastUtils.getInstance(requireContext()).showToast("DownloadSuccess")
+                }
+            }
+        }
+
+    }
+
+    private fun downLoadImageUrl(
+        url: String,
+        name: String,
+        haveSave: Boolean,
+        context: Context
+    ) {
+        mViewModel.downloadImageUrl(
+            url, name, haveSave, context
+        )
     }
 
 }

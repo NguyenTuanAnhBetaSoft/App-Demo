@@ -23,8 +23,12 @@
         android:name="com.betasoft.appdemo.ui.detailImage.DetailImageFragment"
         android:label="DetailImageFragment" >
         <argument
-            android:name="param"
+            android:name="imageUrl"
             app:argType="string" />
+        <argument
+            android:name="idImage"
+            app:argType="string" />
+
     </fragment>
     <action android:id="@+id/action_global_detailImageFragment" app:destination="@id/detailImageFragment"/>
 </navigation>

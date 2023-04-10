@@ -1,5 +1,8 @@
 package com.betasoft.appdemo.ui.openart
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.*
 import com.betasoft.appdemo.data.api.model.ImageResult
 import com.betasoft.appdemo.data.api.responseremote.ItemsItem
@@ -7,6 +10,7 @@ import com.betasoft.appdemo.data.repository.RemoteRepository
 import com.betasoft.appdemo.data.response.DataResponse
 import com.betasoft.appdemo.data.response.LoadingStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,6 +27,8 @@ class HomeViewModel @Inject constructor(private val remoteRepository: RemoteRepo
     val isLoading: LiveData<Boolean> = Transformations.map(dataAppLiveData) {
         dataAppLiveData.value!!.loadingStatus == LoadingStatus.Loading
     }
+
+    val downloadImageLiveData = MutableLiveData<DataResponse<Bitmap>>(DataResponse.DataIdle())
 
 
     /*@Suppress("UNCHECKED_CAST")
@@ -93,21 +99,41 @@ class HomeViewModel @Inject constructor(private val remoteRepository: RemoteRepo
                     )
                     if (result != null) {
                         curPage++
-                        dataAppLiveData.value = DataResponse.DataSuccess(
-                            ImageResult(
-                                curPage,
-                                result.items as List<ItemsItem>?, result.nextCursor
+                        dataAppLiveData.postValue(
+                            DataResponse.DataSuccess(
+                                ImageResult(
+                                    curPage,
+                                    result.items as List<ItemsItem>?, result.nextCursor
+                                )
                             )
                         )
 
                     } else {
-                        dataAppLiveData.value = DataResponse.DataError(null)
+                        dataAppLiveData.postValue(DataResponse.DataError(null))
                     }
                 }
             }
 
         }
 
+    }
+
+     fun downloadImageUrl(
+        url: String,
+        name: String,
+        haveSave: Boolean,
+        context: Context
+    ) {
+        downloadImageLiveData.value = DataResponse.DataLoading(LoadingStatus.Loading)
+        viewModelScope.launch {
+            val result = remoteRepository.downloadImageUrl(url, name, haveSave, context)
+            Log.d("asdfdsf", "result = $result")
+            if (result != null) {
+                downloadImageLiveData.postValue(DataResponse.DataSuccess(result))
+            } else {
+                downloadImageLiveData.postValue(DataResponse.DataError(null))
+            }
+        }
     }
 
 }

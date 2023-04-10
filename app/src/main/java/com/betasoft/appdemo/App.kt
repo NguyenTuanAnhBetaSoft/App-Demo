@@ -28,7 +28,7 @@ class App: Application() {
                     CalligraphyInterceptor(
                         CalligraphyConfig.Builder()
                             .setDefaultFontPath("fonts/ProximaNovaRegular.otf")
-//                            .setFontAttrId(R.attr.fonPath)
+//                            .setFontAttrId(R.attr.fontPath)
                             .build()
                     )
                 ).build()

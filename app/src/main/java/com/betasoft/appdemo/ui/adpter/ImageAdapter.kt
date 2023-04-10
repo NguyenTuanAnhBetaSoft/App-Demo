@@ -14,7 +14,6 @@ class ImageAdapter :
     val data = mutableListOf<ItemsItem>()
     @SuppressLint("NotifyDataSetChanged")
     fun update(isAddMore: Boolean, newData: List<ItemsItem>?) {
-        Log.d("ffsdf", "items = ${newData.toString()}")
         if (isAddMore) {
             val oldSize = data.size
             if (newData != null && newData.isNotEmpty()) {
@@ -51,6 +50,10 @@ class ImageAdapter :
             item.root.setOnClickListener {
                 onClickItemListeners.onClickedItem(data[position])
             }
+
+            item.btnDownLoad.setOnClickListener {
+                onClickItemListeners.conClickedDownload(data[position])
+            }
         }
     }
 
@@ -60,5 +63,6 @@ class ImageAdapter :
 
     interface OnClickItemListeners {
         fun onClickedItem(param: ItemsItem)
+        fun conClickedDownload(param: ItemsItem)
     }
 }
