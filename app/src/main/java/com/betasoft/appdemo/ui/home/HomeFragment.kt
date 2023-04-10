@@ -20,6 +20,10 @@ class HomeFragment : AbsBaseFragment<FragmentHomeBinding>() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
+
     private fun initViewPager() {
         // Define fragments to display in viewPager2
         val listOfFragments = arrayListOf<Fragment>(

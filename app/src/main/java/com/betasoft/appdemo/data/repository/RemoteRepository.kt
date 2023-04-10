@@ -9,10 +9,10 @@ import javax.inject.Singleton
 
 @Singleton
 class RemoteRepository @Inject constructor(private val remoteServices: RemoteServices) {
-    suspend fun fetchImagePagingList(nextCursor: String): DataResponseRemote? =
+    suspend fun fetchImagePagingList(cursor: String): DataResponseRemote? =
         withContext(Dispatchers.IO) {
             try {
-                remoteServices.fetchImagePagingList(nextCursor)
+                remoteServices.fetchImagePagingList(cursor)
             } catch (ex: Exception) {
                 null
             }

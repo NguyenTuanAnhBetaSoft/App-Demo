@@ -9,7 +9,7 @@ interface RemoteServices {
 
     @GET("api/feed/community")
     suspend fun fetchImagePagingList(
-        @Query("nextCursor") nextCursor: String,
+        @Query("cursor") cursor: String,
     ): DataResponseRemote?
 
     @GET("api/feed/community")

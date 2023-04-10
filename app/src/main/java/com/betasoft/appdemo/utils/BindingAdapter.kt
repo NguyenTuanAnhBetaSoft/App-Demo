@@ -9,17 +9,9 @@ import com.google.android.material.imageview.ShapeableImageView
 fun ShapeableImageView.loadImageByUrl(url: String) {
     Glide.with(this)
         .load(url)
-        .placeholder(R.drawable.ic_launcher_background)
-        .error(R.drawable.ic_launcher_background)
+        .placeholder(R.drawable.ic_thumb_image)
+        .error(R.drawable.ic_thumb_image)
         .into(this)
 }
 
-@BindingAdapter("android:loadAvatarByUrl")
-fun ShapeableImageView.loadAvatarByUrl(url: String) {
-    Glide.with(this)
-        .load(url)
-        .placeholder(R.drawable.ic_launcher_background)
-        .error(R.drawable.ic_launcher_background)
-        .into(this)
-}
 

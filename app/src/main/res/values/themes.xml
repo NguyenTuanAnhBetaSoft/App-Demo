@@ -28,6 +28,7 @@
     //text Bold
     <style name="TextAppearance.Bold" parent="android:TextAppearance">
         <item name="fontPath">fonts/ProximaNovaBold.otf</item>
+        <item name="android:ellipsize">end</item>
     </style>
 
 

@@ -5,12 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.betasoft.appdemo.data.api.responseremote.DataResponseRemote
 import com.betasoft.appdemo.data.api.responseremote.ItemsItem
 import com.betasoft.appdemo.databinding.ItemImageBinding
 
 class ImageAdapter :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    lateinit var onClickItemListeners: OnClickItemListeners
     val data = mutableListOf<ItemsItem>()
     @SuppressLint("NotifyDataSetChanged")
     fun update(isAddMore: Boolean, newData: List<ItemsItem>?) {
@@ -44,14 +44,21 @@ class ImageAdapter :
         }
     }
 
-    inner class LocationViewHolder(private val binding: ItemImageBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    inner class LocationViewHolder(private val item: ItemImageBinding) :
+        RecyclerView.ViewHolder(item.root) {
         fun bind(position: Int) {
-            binding.item = data[position]
+            item.item = data[position]
+            item.root.setOnClickListener {
+                onClickItemListeners.onClickedItem(data[position])
+            }
         }
     }
 
     override fun getItemCount(): Int {
         return data.size
+    }
+
+    interface OnClickItemListeners {
+        fun onClickedItem(param: ItemsItem)
     }
 }

@@ -14,10 +14,14 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/rootLayout"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:cardCornerRadius="20dp">
+        android:layout_margin="@dimen/dp_8"
+        app:strokeColor="#BFC6DC"
+        app:strokeWidth="0.75dp"
+        app:cardCornerRadius="@dimen/dp_20"
+       >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -29,7 +33,7 @@
                 android:layout_height="@dimen/dp_50"
                 android:layout_marginStart="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_10"
-                android:loadAvatarByUrl="@{item.userProfile.avatar}"
+                android:loadImageByUrl="@{item.userProfile.avatar}"
                 android:scaleType="centerCrop"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -41,6 +45,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_10"
                 android:gravity="start"
+                android:lines="1"
+                style="@style/TextAppearance.Bold"
                 android:text="@{item.userProfile.name}"
                 app:layout_constraintBottom_toBottomOf="@id/imgAvatar"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -61,15 +67,33 @@
 
             <TextView
                 android:id="@+id/tvPrompt"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:paddingHorizontal="10dp"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginVertical="@dimen/dp_10"
                 android:text="@{item.prompt}"
                 android:lines="3"
                 android:gravity="start"
-                android:ellipsize="end"
+                style="@style/TextAppearance.Bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btnDownLoad"
                 app:layout_constraintTop_toBottomOf="@id/imgRoot" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/btnDownLoad"
+                app:layout_constraintTop_toTopOf="@id/tvPrompt"
+                app:layout_constraintBottom_toBottomOf="@id/tvPrompt"
+                app:layout_constraintStart_toEndOf="@id/tvPrompt"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@drawable/ic_download"
+                android:padding="@dimen/dp_6"
+                android:clickable="true"
+                android:background="@drawable/my_ripple"
+                android:layout_marginEnd="@dimen/dp_6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="true" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
