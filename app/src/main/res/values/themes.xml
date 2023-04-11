@@ -27,6 +27,11 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    // rounded_corner image
+    <style name="rounded_corner">
+        <item name="cornerSize">10dp</item>
+    </style>
+
     //text Bold
     <style name="TextAppearance.Bold" parent="android:TextAppearance">
         <item name="fontPath">fonts/ProximaNovaBold.otf</item>
@@ -62,6 +67,7 @@
         <item name="itemIconTint">@color/bottom_navigation_content_color</item>
         <item name="labelVisibilityMode">labeled</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:textAppearance">@style/TextAppearance.Regular</item>
 
     </style>
 
@@ -73,6 +79,7 @@
         <item name="queryHint">@string/text_hint_search</item>
         <item name="iconifiedByDefault">false</item>
         <item name="closeIcon">@drawable/ic_close_search</item>
+        <item name="android:textAppearance">@style/TextAppearance.Regular</item>
 
     </style>
 

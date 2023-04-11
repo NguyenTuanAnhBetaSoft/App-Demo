@@ -14,5 +14,6 @@ data class ImageLocal(
     val imageId: Long = 0,
     val filePath: String = "",
     val nameAuthor: String = "",
-    val prompt: String = ""
+    val prompt: String = "",
+    val fileName: String = ""
 ): Parcelable

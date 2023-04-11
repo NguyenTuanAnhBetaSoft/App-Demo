@@ -95,11 +95,17 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
     private fun observer() {
         mViewModel.dataAppLiveData.observe(this) {
             it?.let {
-                if (it.loadingStatus == LoadingStatus.Success) {
-                    val body = (it as DataResponse.DataSuccess).body
-                    cursor = body.cursor.toString()
-                    imageAdapter.update(body.curPage > 1, body.items)
+                when(it.loadingStatus) {
+                    LoadingStatus.Success -> {
+                        val body = (it as DataResponse.DataSuccess).body
+                        cursor = body.cursor.toString()
+                        imageAdapter.update(body.curPage > 1, body.items)
+                    }
+                    else -> {
+
+                    }
                 }
+
             }
         }
 

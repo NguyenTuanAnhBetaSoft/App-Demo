@@ -16,7 +16,7 @@ import java.io.OutputStream
 
 object ImageUtils {
 
-    fun saveMediaToStorage(bitmap: Bitmap, name: String, context: Context): String {
+    fun saveMediaToStorage(bitmap: Bitmap, name: String, context: Context): String? {
         // Generating a file name
         var result = ""
         val filename = "${name}${Constants.TYPE_JPG}"
@@ -47,7 +47,7 @@ object ImageUtils {
                     }
                 }
                 if (check) {
-                    result = filePath.toString()
+                    result = ""
                 } else if (!check) {
                     val imageUri: Uri? = resolver.insert(
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues
@@ -68,7 +68,7 @@ object ImageUtils {
             }
 
             if (image.exists()) {
-                result = filePath.toString()
+                result = ""
             } else if (!image.exists()) {
                 fos = FileOutputStream(image)
                 result = filePath.toString()

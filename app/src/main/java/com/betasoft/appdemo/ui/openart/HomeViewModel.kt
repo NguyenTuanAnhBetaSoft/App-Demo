@@ -1,7 +1,6 @@
 package com.betasoft.appdemo.ui.openart
 
 import android.content.Context
-import android.graphics.Bitmap
 import androidx.lifecycle.*
 import com.betasoft.appdemo.data.api.model.ImageLocal
 import com.betasoft.appdemo.data.api.model.ImageResult
@@ -34,12 +33,22 @@ class HomeViewModel @Inject constructor(
 
     val downloadImageLiveData = MutableLiveData<DataResponse<ImageLocal>?>(DataResponse.DataIdle())
 
-    val allImageLocalLiveData = MutableLiveData<DataResponse<List<ImageLocal>?>>(DataResponse.DataIdle())
 
-    private val jobFetchImageList: Job? = null
-    private val jobDownloadImageUrl: Job? = null
-    private val jobInsertImageLocal: Job? = null
-    private val jobGetAllImageLocal: Job? = null
+    private var jobFetchImageList: Job? = null
+    private var jobDownloadImageUrl: Job? = null
+    private var jobInsertImageLocal: Job? = null
+
+    fun canJobFetchImageList() {
+        jobFetchImageList?.cancel()
+    }
+
+    fun canJobDownloadImageUrl() {
+        jobDownloadImageUrl?.cancel()
+    }
+
+    fun canJobInsertImageLocal() {
+        jobInsertImageLocal?.cancel()
+    }
 
     @Suppress("UNCHECKED_CAST")
     fun fetchImageList(isLoadMore: Boolean, cursor: String) {
@@ -48,7 +57,7 @@ class HomeViewModel @Inject constructor(
         ) {
             if (!isLoadMore) {
                 dataAppLiveData.value = DataResponse.DataLoading(LoadingStatus.Loading)
-                viewModelScope.launch {
+                jobFetchImageList = viewModelScope.launch {
                     val result = remoteRepository.fetchImageList(
                     )
                     if (result != null) {
@@ -67,7 +76,7 @@ class HomeViewModel @Inject constructor(
 
             } else {
                 dataAppLiveData.value = DataResponse.DataLoading(LoadingStatus.LoadingMore)
-                viewModelScope.launch {
+                jobFetchImageList = viewModelScope.launch {
                     val result = remoteRepository.fetchImagePagingList(
                         cursor
                     )
@@ -98,13 +107,22 @@ class HomeViewModel @Inject constructor(
         haveSave: Boolean,
         context: Context,
         nameAuthor: String,
-        prompt: String
+        prompt: String,
     ) {
         downloadImageLiveData.value = DataResponse.DataLoading(LoadingStatus.Loading)
-        viewModelScope.launch {
+        jobDownloadImageUrl = viewModelScope.launch {
             val result = localRepository.downloadImageUrl(url, name, haveSave, context)
             if (result != null && result.isNotEmpty()) {
-                downloadImageLiveData.postValue(DataResponse.DataSuccess(ImageLocal(filePath = result, nameAuthor = nameAuthor, prompt = prompt)))
+                downloadImageLiveData.postValue(
+                    DataResponse.DataSuccess(
+                        ImageLocal(
+                            filePath = result,
+                            nameAuthor = nameAuthor,
+                            prompt = prompt,
+                            fileName = name
+                        )
+                    )
+                )
             } else {
                 downloadImageLiveData.postValue(DataResponse.DataError(null))
             }
@@ -112,21 +130,15 @@ class HomeViewModel @Inject constructor(
     }
 
     fun insertImageLocal(imageLocal: ImageLocal) {
-        viewModelScope.launch {
+        jobInsertImageLocal = viewModelScope.launch {
             try {
                 localRepository.insertImageLocal(imageLocal)
-            } catch (e: Exception) {
+            } catch (_: Exception) {
 
             }
         }
 
     }
 
-    fun getAllImageLocal() {
-        allImageLocalLiveData.value = DataResponse.DataLoading(LoadingStatus.Loading)
-        viewModelScope.launch {
-
-        }
-    }
 
 }
