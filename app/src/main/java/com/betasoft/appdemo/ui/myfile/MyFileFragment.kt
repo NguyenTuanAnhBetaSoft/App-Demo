@@ -1,13 +1,7 @@
 package com.betasoft.appdemo.ui.myfile
 
-import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.betasoft.appdemo.R
 import com.betasoft.appdemo.data.api.model.ImageLocal
@@ -42,17 +36,33 @@ class MyFileFragment : AbsBaseFragment<FragmentMyFileBinding>() {
     override fun initView() {
         initRecycleView()
         observer()
-        mViewModel.getAllImageLocal()
+        refreshData(false)
+        binding.mySwipeRefreshLayout.setOnRefreshListener {
+            refreshData(true)
+        }
     }
 
     private fun observer() {
         mViewModel.allImageLocalLiveData.observe(this) {
             it?.let {
-                if (it.loadingStatus == LoadingStatus.Success) {
-                    val body = (it as DataResponse.DataSuccess).body
-                    Log.d("gsdf", "body = ${body.toString()}")
-                    myFileAdapter.update(body)
+                when (it.loadingStatus) {
+                    LoadingStatus.Success -> {
+                        val body = (it as DataResponse.DataSuccess).body
+                        Log.d("gsdf", "body = ${body.toString()}")
+                        myFileAdapter.update(body)
+                        binding.mySwipeRefreshLayout.isEnabled = true
+                        binding.mySwipeRefreshLayout.isRefreshing = false
+                    }
+                    LoadingStatus.Refresh -> {
+                        binding.mySwipeRefreshLayout.isEnabled = true
+                        binding.mySwipeRefreshLayout.isRefreshing = true
+                    }
+                    else -> {
+                        binding.mySwipeRefreshLayout.isEnabled = false
+                        binding.mySwipeRefreshLayout.isRefreshing = false
+                    }
                 }
+
             }
         }
     }
@@ -69,16 +79,21 @@ class MyFileFragment : AbsBaseFragment<FragmentMyFileBinding>() {
     }
 
     private var isViewShown = false
+
     @Suppress("DEPRECATION")
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (view != null && isVisibleToUser) {
             isViewShown =
                 true
-            mViewModel.getAllImageLocal()
+            mViewModel.getAllImageLocal(true)
         } else {
             isViewShown = false
         }
+    }
+
+    private fun refreshData(isRefresh: Boolean) {
+        mViewModel.getAllImageLocal(isRefresh)
     }
 
 }

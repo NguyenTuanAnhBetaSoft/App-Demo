@@ -24,8 +24,13 @@ class MyFileViewModel @Inject constructor(private val localRepository: LocalRepo
         jobGetAllImageLocal?.cancel()
     }
 
-    fun getAllImageLocal() {
-        allImageLocalLiveData.value = DataResponse.DataLoading(LoadingStatus.Loading)
+    fun getAllImageLocal(isRefresh: Boolean) {
+        if (isRefresh) {
+            allImageLocalLiveData.value = DataResponse.DataLoading(LoadingStatus.Refresh)
+        } else {
+            allImageLocalLiveData.value = DataResponse.DataLoading(LoadingStatus.Loading)
+        }
+
         jobGetAllImageLocal = viewModelScope.launch {
             val result = localRepository.getAllImageLocal()
             if (result.isNotEmpty()) {

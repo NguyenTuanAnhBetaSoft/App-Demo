@@ -41,6 +41,7 @@ fun TextView.setTextNameAuthor(string: String) {
 @BindingAdapter("app:setTextNameFile")
 fun TextView.setTextNameFile(string: String) {
     text = buildString {
+        append("File: ")
         append(string)
         append(".jpg")
     }
