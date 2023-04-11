@@ -6,7 +6,7 @@
 
         <variable
             name="item"
-            type="String" />
+            type="com.betasoft.appdemo.data.api.responseremote.ItemsItem" />
 
         <import type="android.view.View" />
     </data>
@@ -20,8 +20,8 @@
             android:id="@+id/imageBackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:loadImageByUrl="@{item}"
-            android:scaleType="fitXY" />
+            android:loadImageByUrl="@{item.image_url}"
+            android:scaleType="fitCenter" />
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -31,13 +31,14 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_back_tool_bar" />
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/btnDownLoad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            app:cardCornerRadius="50dp"
+            app:cardCornerRadius="@dimen/dp_50"
+            app:strokeColor="#BFC6DC"
+            app:strokeWidth="0.75dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +53,7 @@
                 android:padding="@dimen/dp_12"
                 android:src="@drawable/ic_down_to_line_black" />
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

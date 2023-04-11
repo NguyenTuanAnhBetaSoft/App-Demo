@@ -22,12 +22,15 @@
         android:id="@+id/detailImageFragment"
         android:name="com.betasoft.appdemo.ui.detailImage.DetailImageFragment"
         android:label="DetailImageFragment" >
-        <argument
+        <!--<argument
             android:name="imageUrl"
             app:argType="string" />
         <argument
             android:name="idImage"
-            app:argType="string" />
+            app:argType="string" />-->
+        <argument
+            android:name="param"
+            app:argType="com.betasoft.appdemo.data.api.responseremote.ItemsItem"/>
 
     </fragment>
     <action android:id="@+id/action_global_detailImageFragment" app:destination="@id/detailImageFragment"/>

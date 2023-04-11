@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.betasoft.appdemo.data.api.responseremote.ItemsItem" />
+
+        <import type="android.view.View" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgRoot"
+            android:layout_width="80dp"
+            android:layout_height="100dp"
+            android:loadImageByUrl="@{item.image_url}"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/circle" />
+
+        <TextView
+            android:id="@+id/tvName"
+            style="@style/TextAppearance.Bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:lines="1"
+            android:layout_marginHorizontal="@dimen/dp_10"
+            android:text="@{item.userProfile.name}"
+            app:layout_constraintBottom_toBottomOf="@id/imgAvatar"
+            app:layout_constraintEnd_toStartOf="@id/imgAvatar"
+            app:layout_constraintStart_toEndOf="@id/imgRoot"
+            app:layout_constraintTop_toTopOf="@id/imgAvatar" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgAvatar"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="@dimen/dp_50"
+            android:loadImageByUrl="@{item.userProfile.avatar}"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/circle" />
+
+        <TextView
+            android:id="@+id/tvPrompt"
+            style="@style/TextAppearance.Bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:lines="3"
+            android:text="@{item.prompt}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgRoot"
+            app:layout_constraintTop_toBottomOf="@id/imgAvatar" />
+
+        <TextView
+            android:id="@+id/tvFileName"
+            style="@style/TextAppearance.Bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:lines="1"
+            android:text="@{item.prompt}"
+            app:layout_constraintTop_toBottomOf="@id/tvPrompt"
+            app:layout_constraintStart_toEndOf="@id/imgRoot"
+            app:layout_constraintEnd_toEndOf="parent"
+             />
+
+        <!-- <androidx.appcompat.widget.AppCompatImageView
+             android:id="@+id/btnDownLoad"
+             app:layout_constraintTop_toTopOf="@id/tvPrompt"
+             app:layout_constraintBottom_toBottomOf="@id/tvPrompt"
+             app:layout_constraintStart_toEndOf="@id/tvPrompt"
+             app:layout_constraintEnd_toEndOf="parent"
+             android:src="@drawable/ic_download"
+             android:padding="@dimen/dp_6"
+             android:clickable="true"
+             android:background="@drawable/my_ripple"
+             android:layout_marginEnd="@dimen/dp_6"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:focusable="true" />-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

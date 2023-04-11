@@ -35,13 +35,18 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
                 override fun onClickedItem(param: ItemsItem) {
                     findNavController().navigate(
                         HomeFragmentDirections.actionGlobalDetailImageFragment(
-                            param.image_url.toString(), param.id.toString()
+                            param
                         )
                     )
                 }
 
                 override fun conClickedDownload(param: ItemsItem) {
-                    downLoadImageUrl(param.image_url.toString(), param.image_url.toString(), true, requireContext())
+                    downLoadImageUrl(
+                        param.image_url.toString(),
+                        param.id.toString(),
+                        true,
+                        requireContext()
+                    )
                 }
 
             }

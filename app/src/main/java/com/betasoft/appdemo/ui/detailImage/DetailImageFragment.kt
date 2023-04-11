@@ -26,12 +26,12 @@ class DetailImageFragment : AbsBaseFragment<FragmentDetailImageBinding>() {
             findNavController().popBackStack()
         }
 
-        binding.item = args.imageUrl
+        binding.item = args.param
 
         binding.btnDownLoad.setOnClickListener {
             homeViewModel.downloadImageUrl(
-                url = args.imageUrl,
-                name = args.idImage,
+                url = args.param.image_url.toString(),
+                name = args.param.id.toString(),
                 haveSave = true,
                 context = requireContext()
             )

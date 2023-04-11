@@ -1,6 +1,8 @@
 package com.betasoft.appdemo.data.api.responseremote
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 data class DataResponseRemote(
 
@@ -47,6 +49,7 @@ data class DataResponseRemote(
 	val seconds: Int? = null
 )*/
 
+@Parcelize
 data class UserProfile(
 
 //	@field:SerializedName("free_credit_balance")
@@ -108,8 +111,9 @@ data class UserProfile(
 //
 //	@field:SerializedName("subscription_montly_credit")
 //	val subscriptionMontlyCredit: Int? = null
-)
+): Parcelable
 
+@Parcelize
 data class ItemsItem(
 
 //	@field:SerializedName("configs")
@@ -177,7 +181,7 @@ data class ItemsItem(
 
 	@field:SerializedName("prompt")
 	val prompt: String? = null
-)
+): Parcelable
 
 /*data class VariationSource(
 
