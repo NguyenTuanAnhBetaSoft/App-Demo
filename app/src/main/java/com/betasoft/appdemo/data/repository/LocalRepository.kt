@@ -18,6 +18,11 @@ class LocalRepository @Inject constructor(private val imageLocalDao: ImageLocalD
         imageLocalDao.insert(image)
     }
 
+    suspend fun getAllImageLocal(): List<ImageLocal> = withContext(Dispatchers.Default) {
+        imageLocalDao.getAllImageLocal()
+    }
+
+
     suspend fun downloadImageUrl(
         url: String,
         name: String,

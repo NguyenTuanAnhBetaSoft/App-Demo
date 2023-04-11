@@ -15,7 +15,8 @@ object DownloadUrl {
         nameFile: String?,
         haveSave: Boolean,
         context: Context
-    ): Bitmap? {
+    ): String? {
+        var result: String? = null
         val builder = Request.Builder()
         builder.url(url)
         val request: Request = builder.build()
@@ -30,9 +31,10 @@ object DownloadUrl {
                 )
             }
             if (haveSave) {
-                ImageUtils.saveMediaToStorage(bitmap!!, nameFile!!, context)
+                val filePath = ImageUtils.saveMediaToStorage(bitmap!!, nameFile!!, context)
+                result = filePath
             }
-            bitmap
+            return result
         } catch (e: IOException) {
             e.printStackTrace()
             null

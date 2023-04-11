@@ -4,6 +4,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.betasoft.appdemo.R
+import com.betasoft.appdemo.data.response.DataResponse
 import com.betasoft.appdemo.data.response.LoadingStatus
 import com.betasoft.appdemo.databinding.FragmentDetailImageBinding
 import com.betasoft.appdemo.ui.base.AbsBaseFragment
@@ -33,7 +34,9 @@ class DetailImageFragment : AbsBaseFragment<FragmentDetailImageBinding>() {
                 url = args.param.image_url.toString(),
                 name = args.param.id.toString(),
                 haveSave = true,
-                context = requireContext()
+                context = requireContext(),
+                nameAuthor = args.param.userProfile!!.name.toString(),
+                prompt = args.param.prompt.toString()
             )
         }
 
@@ -42,9 +45,11 @@ class DetailImageFragment : AbsBaseFragment<FragmentDetailImageBinding>() {
 
     private fun observer() {
         homeViewModel.downloadImageLiveData.observe(this) {
-            it.let {
+            it?.let {
                 if (it.loadingStatus == LoadingStatus.Success) {
                     ToastUtils.getInstance(requireContext()).showToast("DownloadSuccess")
+                    val body = (it as DataResponse.DataSuccess).body
+                    homeViewModel.insertImageLocal(body)
                 }
             }
         }

@@ -11,6 +11,7 @@ import com.betasoft.appdemo.data.repository.RemoteRepository
 import com.betasoft.appdemo.data.response.DataResponse
 import com.betasoft.appdemo.data.response.LoadingStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,7 +32,14 @@ class HomeViewModel @Inject constructor(
         dataAppLiveData.value!!.loadingStatus == LoadingStatus.Loading
     }
 
-    val downloadImageLiveData = MutableLiveData<DataResponse<Bitmap>>(DataResponse.DataIdle())
+    val downloadImageLiveData = MutableLiveData<DataResponse<ImageLocal>?>(DataResponse.DataIdle())
+
+    val allImageLocalLiveData = MutableLiveData<DataResponse<List<ImageLocal>?>>(DataResponse.DataIdle())
+
+    private val jobFetchImageList: Job? = null
+    private val jobDownloadImageUrl: Job? = null
+    private val jobInsertImageLocal: Job? = null
+    private val jobGetAllImageLocal: Job? = null
 
     @Suppress("UNCHECKED_CAST")
     fun fetchImageList(isLoadMore: Boolean, cursor: String) {
@@ -88,13 +96,15 @@ class HomeViewModel @Inject constructor(
         url: String,
         name: String,
         haveSave: Boolean,
-        context: Context
+        context: Context,
+        nameAuthor: String,
+        prompt: String
     ) {
         downloadImageLiveData.value = DataResponse.DataLoading(LoadingStatus.Loading)
         viewModelScope.launch {
             val result = localRepository.downloadImageUrl(url, name, haveSave, context)
-            if (result != null) {
-                downloadImageLiveData.postValue(DataResponse.DataSuccess(result))
+            if (result != null && result.isNotEmpty()) {
+                downloadImageLiveData.postValue(DataResponse.DataSuccess(ImageLocal(filePath = result, nameAuthor = nameAuthor, prompt = prompt)))
             } else {
                 downloadImageLiveData.postValue(DataResponse.DataError(null))
             }
@@ -110,6 +120,13 @@ class HomeViewModel @Inject constructor(
             }
         }
 
+    }
+
+    fun getAllImageLocal() {
+        allImageLocalLiveData.value = DataResponse.DataLoading(LoadingStatus.Loading)
+        viewModelScope.launch {
+
+        }
     }
 
 }

@@ -42,10 +42,12 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
 
                 override fun conClickedDownload(param: ItemsItem) {
                     downLoadImageUrl(
-                        param.image_url.toString(),
-                        param.id.toString(),
-                        true,
-                        requireContext()
+                        url = param.image_url.toString(),
+                        name = param.id.toString(),
+                        haveSave = true,
+                        context = requireContext(),
+                        nameAuthor = param.userProfile!!.name.toString(),
+                        prompt = param.prompt.toString()
                     )
                 }
 
@@ -102,9 +104,11 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
         }
 
         mViewModel.downloadImageLiveData.observe(this) {
-            it.let {
+            it?.let {
                 if (it.loadingStatus == LoadingStatus.Success) {
                     ToastUtils.getInstance(requireContext()).showToast("DownloadSuccess")
+                    val body = (it as DataResponse.DataSuccess).body
+                    mViewModel.insertImageLocal(body)
                 }
             }
         }
@@ -115,10 +119,12 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
         url: String,
         name: String,
         haveSave: Boolean,
-        context: Context
+        context: Context,
+        nameAuthor: String,
+        prompt: String
     ) {
         mViewModel.downloadImageUrl(
-            url, name, haveSave, context
+            url, name, haveSave, context, nameAuthor, prompt
         )
     }
 

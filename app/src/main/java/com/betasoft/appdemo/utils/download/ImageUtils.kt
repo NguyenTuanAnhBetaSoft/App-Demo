@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import com.betasoft.appdemo.utils.Constants
 import com.betasoft.appdemo.utils.Utils
 import java.io.File
@@ -19,6 +20,10 @@ object ImageUtils {
         // Generating a file name
         var result = ""
         val filename = "${name}${Constants.TYPE_JPG}"
+        val filePath = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+            "$name.jpg"
+        )
         // Output stream
         var fos: OutputStream? = null
         // For devices running android >= Q
@@ -42,14 +47,14 @@ object ImageUtils {
                     }
                 }
                 if (check) {
-                    result = Constants.SUCCESS
+                    result = filePath.toString()
                 } else if (!check) {
                     val imageUri: Uri? = resolver.insert(
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues
                     )
                     // Opening an output stream with the Uri that we got
                     fos = imageUri?.let { resolver.openOutputStream(it) }
-                    result = Constants.SUCCESS
+                    result = filePath.toString()
                 }
             }
         } else {
@@ -63,10 +68,10 @@ object ImageUtils {
             }
 
             if (image.exists()) {
-                result = Constants.SUCCESS
+                result = filePath.toString()
             } else if (!image.exists()) {
                 fos = FileOutputStream(image)
-                result = Constants.SUCCESS
+                result = filePath.toString()
             }
         }
 
