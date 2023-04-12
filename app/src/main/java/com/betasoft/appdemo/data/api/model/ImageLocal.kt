@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-@Entity
+@Entity(tableName = "imageLocal")
 data class ImageLocal(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo("imageId")

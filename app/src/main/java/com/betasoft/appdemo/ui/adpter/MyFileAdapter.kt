@@ -1,56 +1,67 @@
 package com.betasoft.appdemo.ui.adpter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.betasoft.appdemo.data.api.model.ImageLocal
-import com.betasoft.appdemo.data.api.responseremote.ItemsItem
 import com.betasoft.appdemo.databinding.ItemImageMyfileBinding
+import javax.inject.Inject
 
-class MyFileAdapter :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    lateinit var onClickItemListeners: OnClickItemListeners
-    val data = mutableListOf<ImageLocal>()
+class MyFileAdapter
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun update(imageLocals: List<ImageLocal>?) {
-        data.clear()
-        if (imageLocals != null && imageLocals.isNotEmpty()) {
-            data.addAll(imageLocals)
-        }
-        notifyDataSetChanged()
+@Inject
+constructor() : PagingDataAdapter<ImageLocal, MyFileAdapter.ImageLocalViewHolder>(DiffUtils) {
 
+    private var listener: OnClickItemListeners? = null
+
+    fun setListener(listener: OnClickItemListeners) {
+        this.listener = listener
     }
 
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val binding =
-            ItemImageMyfileBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return LocationViewHolder(binding)
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is LocationViewHolder) {
-            holder.bind(position)
-        }
-    }
-
-    inner class LocationViewHolder(private val item: ItemImageMyfileBinding) :
-        RecyclerView.ViewHolder(item.root) {
-        fun bind(position: Int) {
-            item.item = data[position]
-            item.root.setOnClickListener {
-                onClickItemListeners.onClickedItem(data[position])
+    inner class ImageLocalViewHolder(private val binding: ItemImageMyfileBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(image: ImageLocal) {
+            binding.apply {
+                binding.item = image
+                binding.root.setOnClickListener {
+                    listener?.onClickItemListeners(image)
+                }
             }
         }
     }
 
-    override fun getItemCount(): Int {
-        return data.size
+    object DiffUtils : DiffUtil.ItemCallback<ImageLocal>() {
+        override fun areItemsTheSame(oldItem: ImageLocal, newItem: ImageLocal): Boolean {
+            return oldItem.imageId == newItem.imageId
+        }
+
+        override fun areContentsTheSame(oldItem: ImageLocal, newItem: ImageLocal): Boolean {
+            return oldItem == newItem
+        }
+
+    }
+
+    override fun onBindViewHolder(holder: ImageLocalViewHolder, position: Int) {
+        val image = getItem(position)
+        if (image != null) {
+            holder.bind(image)
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageLocalViewHolder {
+        return ImageLocalViewHolder(
+            ItemImageMyfileBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     interface OnClickItemListeners {
-        fun onClickedItem(param: ImageLocal)
+        fun onClickItemListeners(imageLocal: ImageLocal)
     }
 }

@@ -9,7 +9,7 @@ import com.betasoft.appdemo.data.local.roomDb.dao.ImageLocalDao
 @Database(
     entities = [
         ImageLocal::class,
-    ], version = 1, exportSchema = true
+    ], version = 1, exportSchema = false
 
 )
 

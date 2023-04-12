@@ -1,6 +1,9 @@
 package com.betasoft.appdemo.data.repository
 
 import android.content.Context
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.liveData
 import com.betasoft.appdemo.data.api.RemoteServices
 import com.betasoft.appdemo.data.api.model.ImageLocal
 import com.betasoft.appdemo.data.api.responseremote.DataResponseRemote
@@ -18,9 +21,14 @@ class LocalRepository @Inject constructor(private val imageLocalDao: ImageLocalD
         imageLocalDao.insert(image)
     }
 
-    suspend fun getAllImageLocal(): List<ImageLocal> = withContext(Dispatchers.Default) {
+    /*suspend fun getAllImageLocal(): List<ImageLocal> = withContext(Dispatchers.Default) {
         imageLocalDao.getAllImageLocal()
-    }
+    }*/
+
+    /*fun getAllImageLocal() = Pager(
+        config = PagingConfig(pageSize = 20, maxSize = 100),
+        pagingSourceFactory = {imageLocalDao.getAllImageLocal()}
+    ).liveData*/
 
 
     suspend fun downloadImageUrl(
