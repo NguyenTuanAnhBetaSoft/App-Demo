@@ -78,7 +78,7 @@ class MyFileFragment : AbsBaseFragment<FragmentMyFileBinding>() {
 
     }
 
-    private var isViewShown = false
+    /*private var isViewShown = false
 
     @Suppress("DEPRECATION")
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
@@ -90,7 +90,7 @@ class MyFileFragment : AbsBaseFragment<FragmentMyFileBinding>() {
         } else {
             isViewShown = false
         }
-    }
+    }*/
 
     private fun refreshData(isRefresh: Boolean) {
         mViewModel.getAllImageLocal(isRefresh)

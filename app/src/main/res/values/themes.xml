@@ -63,9 +63,9 @@
     //bottom nav
     <style name="BottomNavigation">
 
-        <item name="itemBackground">@color/bottom_navigation_background_color</item>
-        <item name="itemTextColor">@color/bottom_navigation_content_color</item>
-        <item name="itemIconTint">@color/bottom_navigation_content_color</item>
+        <!--<item name="itemBackground">@color/bottom_navigation_background_color</item>-->
+        <!--<item name="itemTextColor">@color/bottom_navigation_content_color</item>
+        <item name="itemIconTint">@color/bottom_navigation_content_color</item>-->
         <item name="labelVisibilityMode">labeled</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textAppearance">@style/TextAppearance.Regular</item>

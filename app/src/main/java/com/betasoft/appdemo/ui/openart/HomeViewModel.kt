@@ -20,7 +20,7 @@ class HomeViewModel @Inject constructor(
     private val localRepository: LocalRepository
 ) :
     ViewModel() {
-    private var curPage = 0
+    private var curPage = 1
     val dataAppLiveData = MutableLiveData<DataResponse<ImageResult>>(DataResponse.DataIdle())
 
     val isLoadingMore: LiveData<Boolean> = Transformations.map(dataAppLiveData) {
@@ -29,6 +29,10 @@ class HomeViewModel @Inject constructor(
 
     val isLoading: LiveData<Boolean> = Transformations.map(dataAppLiveData) {
         dataAppLiveData.value!!.loadingStatus == LoadingStatus.Loading
+    }
+
+    val isError: LiveData<Boolean> = Transformations.map(dataAppLiveData) {
+        dataAppLiveData.value!!.loadingStatus == LoadingStatus.Error
     }
 
     val downloadImageLiveData = MutableLiveData<DataResponse<ImageLocal>?>(DataResponse.DataIdle())
@@ -54,21 +58,26 @@ class HomeViewModel @Inject constructor(
     fun fetchImageList(isLoadMore: Boolean, cursor: String) {
         if (dataAppLiveData.value!!.loadingStatus != LoadingStatus.Loading
             && dataAppLiveData.value!!.loadingStatus != LoadingStatus.LoadingMore
+            && dataAppLiveData.value!!.loadingStatus != LoadingStatus.Refresh
         ) {
             if (!isLoadMore) {
-                dataAppLiveData.value = DataResponse.DataLoading(LoadingStatus.Loading)
+                if (curPage > 1) {
+                    dataAppLiveData.value = DataResponse.DataLoading(LoadingStatus.Refresh)
+                } else {
+                    dataAppLiveData.value = DataResponse.DataLoading(LoadingStatus.Loading)
+                }
+                curPage = 1
                 jobFetchImageList = viewModelScope.launch {
                     val result = remoteRepository.fetchImageList(
                     )
                     if (result != null) {
-                        curPage++
                         dataAppLiveData.value = DataResponse.DataSuccess(
                             ImageResult(
                                 curPage,
                                 result.items as List<ItemsItem>?, result.nextCursor
                             )
                         )
-
+                        curPage++
                     } else {
                         dataAppLiveData.value = DataResponse.DataError(null)
                     }
@@ -81,7 +90,6 @@ class HomeViewModel @Inject constructor(
                         cursor
                     )
                     if (result != null) {
-                        curPage++
                         dataAppLiveData.postValue(
                             DataResponse.DataSuccess(
                                 ImageResult(
@@ -90,7 +98,7 @@ class HomeViewModel @Inject constructor(
                                 )
                             )
                         )
-
+                        curPage++
                     } else {
                         dataAppLiveData.postValue(DataResponse.DataError(null))
                     }

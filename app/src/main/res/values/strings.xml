@@ -11,4 +11,6 @@
     <string name="setting">Setting</string>
     <string name="loading">Loading</string>
     <string name="text_hint_search">Search anythings you want…</string>
+    <string name="no_result_please_try_again">No Result, Please try again.</string>
+    <string name="retry">RETRY</string>
 </resources>

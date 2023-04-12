@@ -62,9 +62,17 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
 
     override fun initView() {
         binding.viewModel = mViewModel
-        mViewModel.fetchImageList(false, cursor)
         observer()
+        fetchImageList(false, cursor)
         initRecycleView()
+
+        binding.mySwipeRefreshLayout.setOnRefreshListener {
+            fetchImageList(false, cursor)
+        }
+
+        binding.btnReTry.setOnClickListener {
+            fetchImageList(false, cursor)
+        }
 
         binding.apply {
             rV.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -74,7 +82,7 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
                     totalItemCount = mLayoutManager.itemCount
                     firstVisibleItem = mLayoutManager.findFirstVisibleItemPosition()
                     if (dy > 0 && totalItemCount - visibleItemCount <= firstVisibleItem + visibleThreshold) {
-                        mViewModel.fetchImageList(true, cursor)
+                        fetchImageList(true, cursor)
                     }
                 }
             })
@@ -95,14 +103,21 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
     private fun observer() {
         mViewModel.dataAppLiveData.observe(this) {
             it?.let {
-                when(it.loadingStatus) {
+                when (it.loadingStatus) {
                     LoadingStatus.Success -> {
                         val body = (it as DataResponse.DataSuccess).body
                         cursor = body.cursor.toString()
                         imageAdapter.update(body.curPage > 1, body.items)
+                        binding.mySwipeRefreshLayout.isEnabled = true
+                        binding.mySwipeRefreshLayout.isRefreshing = false
+                    }
+                    LoadingStatus.Refresh -> {
+                        binding.mySwipeRefreshLayout.isEnabled = true
+                        binding.mySwipeRefreshLayout.isRefreshing = true
                     }
                     else -> {
-
+                        binding.mySwipeRefreshLayout.isEnabled = false
+                        binding.mySwipeRefreshLayout.isRefreshing = false
                     }
                 }
 
@@ -111,10 +126,18 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
 
         mViewModel.downloadImageLiveData.observe(this) {
             it?.let {
-                if (it.loadingStatus == LoadingStatus.Success) {
-                    ToastUtils.getInstance(requireContext()).showToast("DownloadSuccess")
-                    val body = (it as DataResponse.DataSuccess).body
-                    mViewModel.insertImageLocal(body)
+                when (it.loadingStatus) {
+                    LoadingStatus.Success -> {
+                        ToastUtils.getInstance(requireContext()).showToast("DownloadSuccess")
+                        val body = (it as DataResponse.DataSuccess).body
+                        mViewModel.insertImageLocal(body)
+                    }
+                    LoadingStatus.Error -> {
+                        ToastUtils.getInstance(requireContext()).showToast("image already exists")
+                    }
+                    else -> {
+
+                    }
                 }
             }
         }
@@ -132,6 +155,10 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
         mViewModel.downloadImageUrl(
             url, name, haveSave, context, nameAuthor, prompt
         )
+    }
+
+    private fun fetchImageList(isLoadMore: Boolean, cursor: String) {
+        mViewModel.fetchImageList(isLoadMore, cursor)
     }
 
 }

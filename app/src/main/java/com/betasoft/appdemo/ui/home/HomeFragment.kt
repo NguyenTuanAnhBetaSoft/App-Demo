@@ -28,8 +28,6 @@ class HomeFragment : AbsBaseFragment<FragmentHomeBinding>() {
         // Define fragments to display in viewPager2
         val listOfFragments = arrayListOf<Fragment>(
             OpenArtFragment(),
-            MyFileFragment(),
-            MyFileFragment(),
             MyFileFragment()
         )
         binding.viewPager.adapter =
@@ -42,11 +40,6 @@ class HomeFragment : AbsBaseFragment<FragmentHomeBinding>() {
                         true
                     1 -> binding.bottomNavigation.menu.findItem(R.id.myFileFragment).isChecked =
                         true
-                    2 -> binding.bottomNavigation.menu.findItem(R.id.myFileFragment2).isChecked =
-                        true
-                    3 -> binding.bottomNavigation.menu.findItem(R.id.myFileFragment3).isChecked =
-                        true
-
                 }
             }
         })
@@ -61,14 +54,6 @@ class HomeFragment : AbsBaseFragment<FragmentHomeBinding>() {
                 }
                 R.id.myFileFragment -> {
                     binding.viewPager.setCurrentItem(1, true)
-                    return@setOnItemSelectedListener true
-                }
-                R.id.myFileFragment2 -> {
-                    binding.viewPager.setCurrentItem(2, true)
-                    return@setOnItemSelectedListener true
-                }
-                R.id.myFileFragment3 -> {
-                    binding.viewPager.setCurrentItem(3, true)
                     return@setOnItemSelectedListener true
                 }
             }

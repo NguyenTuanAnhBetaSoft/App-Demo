@@ -16,13 +16,45 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rV"
+        <TextView
+            android:id="@+id/tvNoResult"
+            style="@style/TextAppearance.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/no_result_please_try_again"
+            android:textSize="20sp"
+            android:visibility="@{viewModel.isError()?View.VISIBLE:View.GONE}"
+            app:layout_constraintBottom_toTopOf="@id/btnReTry"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btnReTry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/retry"
+            android:visibility="@{viewModel.isError()?View.VISIBLE:View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/mySwipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:paddingHorizontal="8dp"
+            android:visibility="@{viewModel.isError()?View.GONE:View.VISIBLE}"
             app:layout_constraintBottom_toTopOf="@id/progressLoadMore"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <io.supercharge.shimmerlayout.ShimmerLayout
             android:id="@+id/shimmerLayout"
@@ -50,7 +82,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rV" />
+            app:layout_constraintTop_toBottomOf="@id/mySwipeRefreshLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
