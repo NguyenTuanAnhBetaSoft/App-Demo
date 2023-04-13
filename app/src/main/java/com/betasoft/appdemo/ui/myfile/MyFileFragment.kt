@@ -1,9 +1,7 @@
 package com.betasoft.appdemo.ui.myfile
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -11,15 +9,15 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.betasoft.appdemo.R
 import com.betasoft.appdemo.data.api.model.ImageLocal
-import com.betasoft.appdemo.databinding.FragmentHomeBinding
 import com.betasoft.appdemo.databinding.FragmentMyFileBinding
 import com.betasoft.appdemo.ui.adpter.MyFileAdapter
 import com.betasoft.appdemo.ui.base.AbsBaseFragment
-import com.betasoft.appdemo.ui.home.HomeFragment
+import com.betasoft.appdemo.ui.home.HomeFragmentDirections
 import com.betasoft.appdemo.utils.ToastUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -49,7 +47,8 @@ class MyFileFragment : AbsBaseFragment<FragmentMyFileBinding>(),
 
 
 
-        binding.searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener{
+        binding.searchView.setOnQueryTextListener(object :
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
@@ -58,7 +57,7 @@ class MyFileFragment : AbsBaseFragment<FragmentMyFileBinding>(),
                 if (newText!!.isNotEmpty()) {
                     searchImageLocal(newText.trim())
                 } else {
-
+                    refreshData()
                 }
                 return false
             }
@@ -67,17 +66,6 @@ class MyFileFragment : AbsBaseFragment<FragmentMyFileBinding>(),
 
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.searchView.setOnQueryTextFocusChangeListener { view, hasFocus ->
-            if (hasFocus) {
-                mViewModel.hintBottomNav(true)
-                Log.d("fdsafdsf", "hasfocus")
-            } else {
-                mViewModel.hintBottomNav(false)
-            }
-        }
-    }
 
     private fun observer() {
 
@@ -95,7 +83,7 @@ class MyFileFragment : AbsBaseFragment<FragmentMyFileBinding>(),
     }
 
     override fun onClickItemListeners(imageLocal: ImageLocal) {
-        ToastUtils.getInstance(requireContext()).showToast("$imageLocal")
+        findNavController().navigate(HomeFragmentDirections.actionGlobalDetailImageLocalFragment(imageLocal))
     }
 
     private fun configureStateListener() {
@@ -120,7 +108,6 @@ class MyFileFragment : AbsBaseFragment<FragmentMyFileBinding>(),
                     else -> null
                 }
                 errorState?.let {
-                    ToastUtils.getInstance(requireContext()).showToast("er")
                     binding.shimmerLayout.visibility = View.GONE
 
                 }
@@ -132,7 +119,7 @@ class MyFileFragment : AbsBaseFragment<FragmentMyFileBinding>(),
     private fun refreshData() {
         lifecycleScope.launch {
             mViewModel.getAllImageLocal().collectLatest { response ->
-                Log.d("maincxczcx", "onCreate: $response")
+                Timber.d("onCreate: $response")
                 myFileAdapter.submitData(response)
             }
         }
@@ -141,7 +128,6 @@ class MyFileFragment : AbsBaseFragment<FragmentMyFileBinding>(),
     private fun searchImageLocal(searchQuery: String) {
         lifecycleScope.launch {
             mViewModel.searchImageLocal(searchQuery).collectLatest { response ->
-                Log.d("maincxczcx", "onCreate: $response")
                 myFileAdapter.submitData(response)
             }
         }

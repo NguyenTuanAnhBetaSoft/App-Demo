@@ -16,6 +16,8 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="@dimen/dp_20"
+            android:background="@drawable/bg_search"
+            app:queryBackground="@null"
             android:theme="@style/SearchViewTheme"
             app:layout_constraintTop_toTopOf="parent" />
 

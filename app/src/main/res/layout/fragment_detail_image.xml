@@ -4,32 +4,11 @@
 
     <data>
 
-        <variable
-            name="item"
-            type="com.betasoft.appdemo.data.api.responseremote.ItemsItem" />
-
-        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imageBackground"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:loadImageByUrl="@{item.image_url}"
-            android:scaleType="fitCenter" />
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            android:background="@color/transparent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/ic_back_tool_bar" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/btnDownLoad"
@@ -54,6 +33,21 @@
                 android:src="@drawable/ic_down_to_line_black" />
 
         </com.google.android.material.card.MaterialCardView>
+
+        <com.betasoft.appdemo.li.TouchImageView
+            android:id="@+id/touch_imageview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/background_dark"
+            android:scaleType="fitCenter" />
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="@color/transparent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_back_tool_bar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

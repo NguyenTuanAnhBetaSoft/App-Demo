@@ -1,7 +1,6 @@
 package com.betasoft.appdemo.ui.adpter
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +11,7 @@ class ImageAdapter :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     lateinit var onClickItemListeners: OnClickItemListeners
     val data = mutableListOf<ItemsItem>()
+
     @SuppressLint("NotifyDataSetChanged")
     fun update(isAddMore: Boolean, newData: List<ItemsItem>?) {
         if (isAddMore) {
@@ -54,6 +54,12 @@ class ImageAdapter :
             item.btnDownLoad.setOnClickListener {
                 onClickItemListeners.conClickedDownload(data[position])
             }
+
+            item.root.setOnLongClickListener {
+                return@setOnLongClickListener onClickItemListeners.onLongClick(data[position], position)
+            }
+
+
         }
     }
 
@@ -64,5 +70,7 @@ class ImageAdapter :
     interface OnClickItemListeners {
         fun onClickedItem(param: ItemsItem)
         fun conClickedDownload(param: ItemsItem)
+
+        fun onLongClick(items: ItemsItem, position: Int): Boolean
     }
 }

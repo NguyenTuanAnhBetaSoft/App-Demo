@@ -22,16 +22,22 @@
         android:id="@+id/detailImageFragment"
         android:name="com.betasoft.appdemo.ui.detailImage.DetailImageFragment"
         android:label="DetailImageFragment" >
-        <!--<argument
-            android:name="imageUrl"
-            app:argType="string" />
-        <argument
-            android:name="idImage"
-            app:argType="string" />-->
         <argument
             android:name="param"
             app:argType="com.betasoft.appdemo.data.api.responseremote.ItemsItem"/>
 
     </fragment>
     <action android:id="@+id/action_global_detailImageFragment" app:destination="@id/detailImageFragment"/>
+    <fragment
+        tools:layout="@layout/fragment_detail_image"
+        android:id="@+id/detailImageLocalFragment"
+        android:name="com.betasoft.appdemo.ui.detailImagelocal.DetailImageLocalFragment"
+        android:label="DetailImageLocalFragment" >
+
+        <argument
+            android:name="param"
+            app:argType="com.betasoft.appdemo.data.api.model.ImageLocal"/>
+    </fragment>
+
+    <action android:id="@+id/action_global_detailImageLocalFragment" app:destination="@id/detailImageLocalFragment" />
 </navigation>

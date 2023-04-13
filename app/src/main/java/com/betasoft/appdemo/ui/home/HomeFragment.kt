@@ -1,36 +1,33 @@
 package com.betasoft.appdemo.ui.home
 
-import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.betasoft.appdemo.R
 import com.betasoft.appdemo.databinding.FragmentHomeBinding
 import com.betasoft.appdemo.ui.base.AbsBaseFragment
 import com.betasoft.appdemo.ui.myfile.MyFileFragment
-import com.betasoft.appdemo.ui.myfile.MyFileViewModel
 import com.betasoft.appdemo.ui.openart.OpenArtFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 
 @AndroidEntryPoint
 class HomeFragment : AbsBaseFragment<FragmentHomeBinding>() {
-    private val mViewModel by viewModels<MyFileViewModel>()
     override fun getLayout(): Int {
         return R.layout.fragment_home
     }
 
     override fun initView() {
-        binding.viewModel = mViewModel
+
         observer()
         initViewPager()
         onBackPressed()
 
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     private fun initViewPager() {
@@ -81,13 +78,19 @@ class HomeFragment : AbsBaseFragment<FragmentHomeBinding>() {
     }
 
     private fun observer() {
-        mViewModel.hintLiveData.observe(this) {
-            if (it) {
-                Log.d("fdsafdsf", "it = $it")
-                binding.bottomNavigation.visibility = View.GONE
-            } else {
-                binding.bottomNavigation.visibility = View.VISIBLE
-            }
+        activity?.let {
+            KeyboardVisibilityEvent.setEventListener(it, object : KeyboardVisibilityEventListener {
+                override fun onVisibilityChanged(isOpen: Boolean) {
+                    if (isOpen) binding.bottomNavigation.visibility = View.GONE
+                    else {
+                        lifecycleScope.launch {
+                            delay(200)
+                            binding.bottomNavigation.visibility = View.VISIBLE
+                        }
+                    }
+
+                }
+            })
         }
     }
 

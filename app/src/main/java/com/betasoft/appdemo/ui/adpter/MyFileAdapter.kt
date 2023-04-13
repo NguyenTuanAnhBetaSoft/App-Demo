@@ -1,7 +1,6 @@
 package com.betasoft.appdemo.ui.adpter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -11,7 +10,6 @@ import com.betasoft.appdemo.databinding.ItemImageMyfileBinding
 import javax.inject.Inject
 
 class MyFileAdapter
-
 @Inject
 constructor() : PagingDataAdapter<ImageLocal, MyFileAdapter.ImageLocalViewHolder>(DiffUtils) {
 

@@ -51,6 +51,11 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
                     )
                 }
 
+                override fun onLongClick(items: ItemsItem, position: Int): Boolean {
+                    ToastUtils.getInstance(requireContext()).showToast("ahihi ${position.toString()}")
+                    return true
+                }
+
             }
         }
 

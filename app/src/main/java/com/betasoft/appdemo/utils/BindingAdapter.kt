@@ -5,6 +5,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.betasoft.appdemo.R
+import com.betasoft.appdemo.li.TouchImageView
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
@@ -12,8 +13,8 @@ import com.google.android.material.imageview.ShapeableImageView
 fun ShapeableImageView.loadImageByUrl(url: String) {
     Glide.with(this)
         .load(url)
-        .placeholder(R.drawable.ic_thumb_image)
-        .error(R.drawable.ic_thumb_image)
+        .placeholder(R.drawable.ic_image_empty)
+        .error(R.drawable.ic_image_empty)
         .into(this)
 }
 
@@ -22,12 +23,12 @@ fun ShapeableImageView.loadImageByUrl(url: String) {
 fun ImageView.loadImageByUri(uri: Any?) {
     if (uri is Uri) {
         Glide.with(this).load(uri)
-            .placeholder(R.drawable.ic_thumb_image)
-            .error(R.drawable.ic_thumb_image).into(this)
+            .placeholder(R.drawable.ic_image_empty)
+            .error(R.drawable.ic_image_empty).into(this)
     } else {
-        Glide.with(this).load(R.drawable.ic_thumb_image)
-            .placeholder(R.drawable.ic_thumb_image)
-            .error(R.drawable.ic_thumb_image).into(this)
+        Glide.with(this).load(R.drawable.ic_image_empty)
+            .placeholder(R.drawable.ic_image_empty)
+            .error(R.drawable.ic_image_empty).into(this)
     }
 }
 
@@ -45,6 +46,22 @@ fun TextView.setTextNameFile(string: String) {
         append(string)
         append(".jpg")
     }
+}
+
+@BindingAdapter("android:bindTouchImage")
+fun TouchImageView.bindTouchImage(uri: String?) {
+    if (uri != null) {
+        Glide.with(this)
+            .load(uri)
+            .placeholder(androidx.appcompat.R.color.background_floating_material_dark)
+            .error(androidx.appcompat.R.color.background_floating_material_dark)
+            .into(this)
+    } else {
+        Glide.with(this).load(androidx.appcompat.R.color.background_floating_material_dark)
+            .error(androidx.appcompat.R.color.background_floating_material_dark)
+            .into(this)
+    }
+
 }
 
 

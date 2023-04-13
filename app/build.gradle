@@ -65,6 +65,7 @@ dependencies {
     implementation okhttp_lib
     implementation glide_lib
     kapt glide_annotation
+    implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC2'
 
     // Room Db
     implementation "androidx.room:room-runtime:2.5.1"
