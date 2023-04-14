@@ -1,16 +1,32 @@
 package com.betasoft.appdemo.ui.adpter
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.betasoft.appdemo.R
 import com.betasoft.appdemo.data.api.responseremote.ItemsItem
 import com.betasoft.appdemo.databinding.ItemImageBinding
+import com.betasoft.appdemo.extensions.getDimenResources
+import com.betasoft.appdemo.extensions.setMargin
+import com.betasoft.appdemo.extensions.setOnSingClickListener
 
 class ImageAdapter :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    lateinit var onClickItemListeners: OnClickItemListeners
     val data = mutableListOf<ItemsItem>()
+    private var select = false
+    private val listItemChecked = arrayListOf<ItemsItem>()
+    var listSelect: ((List<ItemsItem>) -> Unit)? = null
+    var listSelected: ((List<ItemsItem>) -> Unit)? = null
+    var onClickItem: ((ItemsItem) -> Unit)? = null
+    var onClickDownLoad: ((ItemsItem) -> Unit)? = null
+    fun setSelect(boolean: Boolean) {
+        this.select = boolean
+    }
+
+    fun isSelect() =select
 
     @SuppressLint("NotifyDataSetChanged")
     fun update(isAddMore: Boolean, newData: List<ItemsItem>?) {
@@ -47,18 +63,59 @@ class ImageAdapter :
         RecyclerView.ViewHolder(item.root) {
         fun bind(position: Int) {
             item.item = data[position]
-            item.root.setOnClickListener {
-                onClickItemListeners.onClickedItem(data[position])
-            }
 
             item.btnDownLoad.setOnClickListener {
-                onClickItemListeners.conClickedDownload(data[position])
+                onClickDownLoad?.invoke(data[position])
             }
 
-            item.root.setOnLongClickListener {
-                return@setOnLongClickListener onClickItemListeners.onLongClick(data[position], position)
+            item.rootLayout.setOnLongClickListener {
+                if (!select) {
+                    listItemChecked.add(data[position])
+                    Log.d("fsdfsd", "listItemchecked = $listItemChecked")
+                    setSelect(true)
+                    listSelect?.invoke(data)
+                    listSelected?.invoke(listItemChecked)
+                    notifyItemRangeChanged(0, data.size)
+                    true
+                } else false
             }
 
+
+
+            val isChecked = listItemChecked.contains(data[position])
+            item.iconCheck.visibility = if (select) View.VISIBLE
+            else View.GONE
+
+            if (select) {
+                if (isChecked) {
+                    item.iconCheck.setBackgroundResource(R.drawable.ic_check_circle)
+                    item.rootLayout.setMargin(itemView.context.getDimenResources(R.dimen.dp_16))
+
+                } else {
+                    item.iconCheck.setBackgroundResource(R.drawable.ic_radio_uncheck_white)
+                    item.rootLayout.setMargin(0)
+                }
+            } else {
+                item.rootLayout.setMargin(0)
+            }
+
+            item.rootLayout.setOnSingClickListener {
+                if (select) {
+                    if (isChecked) {
+                        listItemChecked.remove(data[position])
+                    } else {
+                        listItemChecked.add(data[position])
+                    }
+
+                    notifyItemChanged(position)
+                    listSelected?.invoke(listItemChecked)
+
+                } else {
+                    onClickItem?.invoke(data[position])
+
+                }
+                Log.d("fsdfs", "listselected2 = $listItemChecked")
+            }
 
         }
     }
@@ -67,10 +124,5 @@ class ImageAdapter :
         return data.size
     }
 
-    interface OnClickItemListeners {
-        fun onClickedItem(param: ItemsItem)
-        fun conClickedDownload(param: ItemsItem)
 
-        fun onLongClick(items: ItemsItem, position: Int): Boolean
-    }
 }

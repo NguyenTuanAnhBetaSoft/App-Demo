@@ -1,6 +1,10 @@
 package com.betasoft.appdemo.ui.openart
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
+import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -24,6 +28,8 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
     private var totalItemCount: Int = 0
     private var visibleThreshold = 1
     private var cursor = ""
+    private var listItemDownLoad = mutableListOf<ItemsItem>()
+    private var listItemDownLoad1 = mutableListOf<ItemsItem>()
 
     private val mViewModel: HomeViewModel by viewModels()
 
@@ -31,31 +37,22 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
 
     private val imageAdapter by lazy {
         ImageAdapter().apply {
-            onClickItemListeners = object : ImageAdapter.OnClickItemListeners {
-                override fun onClickedItem(param: ItemsItem) {
-                    findNavController().navigate(
-                        HomeFragmentDirections.actionGlobalDetailImageFragment(
-                            param
-                        )
+            onClickItem = {
+                findNavController().navigate(
+                    HomeFragmentDirections.actionGlobalDetailImageFragment(
+                        it
                     )
-                }
-
-                override fun conClickedDownload(param: ItemsItem) {
-                    downLoadImageUrl(
-                        url = param.image_url.toString(),
-                        name = param.id.toString(),
-                        haveSave = true,
-                        context = requireContext(),
-                        nameAuthor = param.userProfile!!.name.toString(),
-                        prompt = param.prompt.toString()
-                    )
-                }
-
-                override fun onLongClick(items: ItemsItem, position: Int): Boolean {
-                    ToastUtils.getInstance(requireContext()).showToast("ahihi ${position.toString()}")
-                    return true
-                }
-
+                )
+            }
+            onClickDownLoad = {
+                downLoadImageUrl(
+                    url = it.image_url.toString(),
+                    name = it.id.toString(),
+                    haveSave = true,
+                    context = requireContext(),
+                    nameAuthor = it.userProfile!!.name.toString(),
+                    prompt = it.prompt.toString()
+                )
             }
         }
 
@@ -66,6 +63,7 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
     }
 
     override fun initView() {
+        onBackPressed()
         binding.viewModel = mViewModel
         observer()
         fetchImageList(false, cursor)
@@ -92,6 +90,38 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
                 }
             })
         }
+
+        imageAdapter.listSelect = {
+            if (imageAdapter.isSelect()) {
+
+            } else {
+
+            }
+            mViewModel.isSelect(true)
+            mViewModel.updateListItemSelect(it)
+
+        }
+
+        binding.btnClose.setOnClickListener {
+            mViewModel.isSelect(false)
+            imageAdapter.setSelect(false)
+            imageAdapter.notifyItemRangeChanged(0, listItemDownLoad.size)
+        }
+
+        imageAdapter.listSelected = {
+            listItemDownLoad1.clear()
+            listItemDownLoad1.addAll(it)
+            Log.d("9999999", "listselected = ${it.toString()}")
+
+        }
+
+        binding.btnMutableDownLoad.setOnClickListener {
+
+            Log.d("5656565656", "listDownload = $listItemDownLoad1")
+        }
+
+
+
     }
 
     private fun initRecycleView() {
@@ -105,6 +135,7 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private fun observer() {
         mViewModel.dataAppLiveData.observe(this) {
             it?.let {
@@ -127,6 +158,12 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
                 }
 
             }
+
+        }
+
+        mViewModel.listItemSelectLiveData.observe(this) {
+            val total = it?.size
+            binding.tvNumberDownload.text = "Do you want to download $total images?"
         }
 
         mViewModel.downloadImageLiveData.observe(this) {
@@ -144,6 +181,22 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
 
                     }
                 }
+            }
+        }
+
+        mViewModel.isSelectLiveData.observe(this) {
+            Log.d("55555", "select = $it")
+            if (it) {
+                binding.cardMutableDownload.visibility = View.VISIBLE
+            } else {
+                binding.cardMutableDownload.visibility = View.GONE
+            }
+        }
+
+        mViewModel.listItemSelectLiveData.observe(this) {
+            it?.let { list ->
+                listItemDownLoad.clear()
+                listItemDownLoad.addAll(list)
             }
         }
 
@@ -165,5 +218,24 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
     private fun fetchImageList(isLoadMore: Boolean, cursor: String) {
         mViewModel.fetchImageList(isLoadMore, cursor)
     }
+
+    private fun onBackPressed() {
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (imageAdapter.isSelect()) {
+                    mViewModel.isSelect(false)
+                    imageAdapter.setSelect(false)
+                    imageAdapter.notifyItemRangeChanged(0, listItemDownLoad.size)
+                } else {
+                    if (isAdded) {
+                        requireActivity().finish()
+                    }
+                }
+            }
+
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+    }
+
 
 }
