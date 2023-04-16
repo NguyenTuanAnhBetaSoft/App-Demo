@@ -37,9 +37,7 @@ class HomeViewModel @Inject constructor(
 
     val downloadImageLiveData = MutableLiveData<DataResponse<ImageLocal>?>(DataResponse.DataIdle())
 
-    val listItemSelectLiveData = MutableLiveData<List<ItemsItem>?>()
-
-    private val listAllItem = mutableListOf<ItemsItem>()
+    val listItemSelectedLiveData = MutableLiveData<List<ItemsItem>?>()
 
     val isSelectLiveData = MutableLiveData(false)
 
@@ -154,9 +152,10 @@ class HomeViewModel @Inject constructor(
 
     }
 
-    fun updateListItemSelect(list: List<ItemsItem>) {
+
+    fun updateListItemSelected(list: List<ItemsItem>) {
         viewModelScope.launch {
-            listItemSelectLiveData.postValue(list)
+            listItemSelectedLiveData.postValue(list)
         }
     }
 

@@ -19,15 +19,13 @@
         android:backgroundTint="#8A8382"
         app:cardCornerRadius="@dimen/dp_16">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/icon_check"
                 android:layout_margin="@dimen/dp_8"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:elevation="@dimen/dp_12" />
@@ -44,6 +42,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
+                    android:layout_marginBottom="@dimen/dp_10"
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.imageview.ShapeableImageView
@@ -51,7 +50,7 @@
                         android:layout_width="@dimen/dp_50"
                         android:layout_height="@dimen/dp_50"
                         android:layout_marginStart="@dimen/dp_10"
-                        android:layout_marginTop="@dimen/dp_10"
+                        android:layout_marginTop="@dimen/dp_6"
                         android:loadImageByUrl="@{item.userProfile.avatar}"
                         android:scaleType="centerCrop"
                         app:layout_constraintStart_toStartOf="parent"
@@ -61,10 +60,11 @@
                     <TextView
                         android:id="@+id/tvName"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
                         android:layout_marginStart="@dimen/dp_10"
-                        android:gravity="start"
+                        android:gravity="start|center_vertical"
                         android:lines="1"
+                        android:textSize="12sp"
                         style="@style/TextAppearance.Bold"
                         android:text="@{item.userProfile.name}"
                         app:layout_constraintBottom_toBottomOf="@id/imgAvatar"
@@ -74,51 +74,49 @@
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/imgRoot"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:scaleType="centerCrop"
-                        android:layout_marginTop="@dimen/dp_10"
+                        android:layout_marginTop="@dimen/dp_6"
                         android:loadImageByUrl="@{item.image_url}"
                         app:layout_constraintDimensionRatio="1:1"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/imgAvatar" />
 
                     <TextView
                         android:id="@+id/tvPrompt"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
                         android:layout_marginStart="@dimen/dp_10"
-                        android:layout_marginVertical="@dimen/dp_10"
+                        android:layout_marginTop="10dp"
                         android:text="@{item.prompt}"
-                        android:lines="3"
+                        android:lines="2"
                         android:gravity="start"
+                        android:textSize="12sp"
                         style="@style/TextAppearance.Bold"
+                        app:layout_constraintTop_toBottomOf="@id/imgRoot"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/btnDownLoad"
-                        app:layout_constraintTop_toBottomOf="@id/imgRoot" />
+                        />
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/btnDownLoad"
                         app:layout_constraintTop_toTopOf="@id/tvPrompt"
                         app:layout_constraintBottom_toBottomOf="@id/tvPrompt"
-                        app:layout_constraintStart_toEndOf="@id/tvPrompt"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:src="@drawable/ic_download"
                         android:padding="@dimen/dp_6"
-                        android:clickable="true"
                         android:background="@drawable/my_ripple"
                         android:layout_marginEnd="@dimen/dp_6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:focusable="true" />
+                        />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
 

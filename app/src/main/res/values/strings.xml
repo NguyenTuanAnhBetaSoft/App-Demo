@@ -14,4 +14,5 @@
     <string name="no_result_please_try_again">No Result, Please try again.</string>
     <string name="retry">RETRY</string>
     <string name="download">DownLoad</string>
+    <string name="cancel">Cancel</string>
 </resources>

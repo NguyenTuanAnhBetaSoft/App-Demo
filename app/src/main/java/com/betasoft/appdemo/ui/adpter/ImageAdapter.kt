@@ -20,10 +20,17 @@ class ImageAdapter :
     private val listItemChecked = arrayListOf<ItemsItem>()
     var listSelect: ((List<ItemsItem>) -> Unit)? = null
     var listSelected: ((List<ItemsItem>) -> Unit)? = null
+
+
     var onClickItem: ((ItemsItem) -> Unit)? = null
     var onClickDownLoad: ((ItemsItem) -> Unit)? = null
     fun setSelect(boolean: Boolean) {
         this.select = boolean
+    }
+
+    fun cleanListItemChecked() {
+        listItemChecked.clear()
+        listSelected?.invoke(arrayListOf())
     }
 
     fun isSelect() =select
@@ -44,6 +51,10 @@ class ImageAdapter :
             notifyDataSetChanged()
         }
 
+        if (select) {
+            listSelect?.invoke(data)
+        }
+
     }
 
 
@@ -62,6 +73,7 @@ class ImageAdapter :
     inner class LocationViewHolder(private val item: ItemImageBinding) :
         RecyclerView.ViewHolder(item.root) {
         fun bind(position: Int) {
+            Log.d("fsdfsd", "position = $position")
             item.item = data[position]
 
             item.btnDownLoad.setOnClickListener {
@@ -73,8 +85,8 @@ class ImageAdapter :
                     listItemChecked.add(data[position])
                     Log.d("fsdfsd", "listItemchecked = $listItemChecked")
                     setSelect(true)
-                    listSelect?.invoke(data)
                     listSelected?.invoke(listItemChecked)
+                    listSelect?.invoke(data)
                     notifyItemRangeChanged(0, data.size)
                     true
                 } else false
@@ -83,6 +95,7 @@ class ImageAdapter :
 
 
             val isChecked = listItemChecked.contains(data[position])
+            Log.d("fsdfsd", "ischecked = $isChecked")
             item.iconCheck.visibility = if (select) View.VISIBLE
             else View.GONE
 

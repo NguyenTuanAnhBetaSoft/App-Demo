@@ -2,7 +2,6 @@ package com.betasoft.appdemo.ui.openart
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
@@ -28,8 +27,8 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
     private var totalItemCount: Int = 0
     private var visibleThreshold = 1
     private var cursor = ""
-    private var listItemDownLoad = mutableListOf<ItemsItem>()
-    private var listItemDownLoad1 = mutableListOf<ItemsItem>()
+    private var listItemSelect = mutableListOf<ItemsItem>()
+    private var listItemSelected = mutableListOf<ItemsItem>()
 
     private val mViewModel: HomeViewModel by viewModels()
 
@@ -91,35 +90,26 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
             })
         }
 
-        imageAdapter.listSelect = {
-            if (imageAdapter.isSelect()) {
-
-            } else {
-
-            }
-            mViewModel.isSelect(true)
-            mViewModel.updateListItemSelect(it)
-
+        binding.btnClose.setOnClickListener {
+            updateUnSelect()
         }
 
-        binding.btnClose.setOnClickListener {
-            mViewModel.isSelect(false)
-            imageAdapter.setSelect(false)
-            imageAdapter.notifyItemRangeChanged(0, listItemDownLoad.size)
+        imageAdapter.listSelect = {
+            listItemSelect.clear()
+            listItemSelect.addAll(it)
         }
 
         imageAdapter.listSelected = {
-            listItemDownLoad1.clear()
-            listItemDownLoad1.addAll(it)
-            Log.d("9999999", "listselected = ${it.toString()}")
-
+            mViewModel.updateListItemSelected(it)
+            listItemSelected.clear()
+            listItemSelected.addAll(it)
         }
 
         binding.btnMutableDownLoad.setOnClickListener {
+            if (listItemSelect.size > 0) {
 
-            Log.d("5656565656", "listDownload = $listItemDownLoad1")
+            }
         }
-
 
 
     }
@@ -161,10 +151,6 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
 
         }
 
-        mViewModel.listItemSelectLiveData.observe(this) {
-            val total = it?.size
-            binding.tvNumberDownload.text = "Do you want to download $total images?"
-        }
 
         mViewModel.downloadImageLiveData.observe(this) {
             it?.let {
@@ -185,7 +171,6 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
         }
 
         mViewModel.isSelectLiveData.observe(this) {
-            Log.d("55555", "select = $it")
             if (it) {
                 binding.cardMutableDownload.visibility = View.VISIBLE
             } else {
@@ -193,10 +178,14 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
             }
         }
 
-        mViewModel.listItemSelectLiveData.observe(this) {
-            it?.let { list ->
-                listItemDownLoad.clear()
-                listItemDownLoad.addAll(list)
+
+        mViewModel.listItemSelectedLiveData.observe(this) {
+            it?.let {
+                if (imageAdapter.isSelect()) {
+                    mViewModel.isSelect(true)
+                    val total = it.size
+                    binding.tvNumberDownload.text = "Do you want to download $total images?"
+                }
             }
         }
 
@@ -223,9 +212,7 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (imageAdapter.isSelect()) {
-                    mViewModel.isSelect(false)
-                    imageAdapter.setSelect(false)
-                    imageAdapter.notifyItemRangeChanged(0, listItemDownLoad.size)
+                    updateUnSelect()
                 } else {
                     if (isAdded) {
                         requireActivity().finish()
@@ -235,6 +222,13 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
 
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+    }
+
+    private fun updateUnSelect() {
+        mViewModel.isSelect(false)
+        imageAdapter.setSelect(false)
+        imageAdapter.notifyItemRangeChanged(0, listItemSelect.size)
+        imageAdapter.cleanListItemChecked()
     }
 
 
