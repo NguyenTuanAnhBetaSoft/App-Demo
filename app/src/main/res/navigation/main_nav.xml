@@ -29,7 +29,7 @@
     </fragment>
     <action android:id="@+id/action_global_detailImageFragment" app:destination="@id/detailImageFragment"/>
     <fragment
-        tools:layout="@layout/fragment_detail_image"
+        tools:layout="@layout/fragment_detail_image_local"
         android:id="@+id/detailImageLocalFragment"
         android:name="com.betasoft.appdemo.ui.detailImagelocal.DetailImageLocalFragment"
         android:label="DetailImageLocalFragment" >

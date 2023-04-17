@@ -15,8 +15,8 @@ object DownloadUrl {
         nameFile: String?,
         haveSave: Boolean,
         context: Context
-    ): String? {
-        var result: String? = null
+    ): String {
+        var result = ""
         val builder = Request.Builder()
         builder.url(url)
         val request: Request = builder.build()
@@ -37,7 +37,7 @@ object DownloadUrl {
             return result
         } catch (e: IOException) {
             e.printStackTrace()
-            null
+            ""
         }
     }
 }

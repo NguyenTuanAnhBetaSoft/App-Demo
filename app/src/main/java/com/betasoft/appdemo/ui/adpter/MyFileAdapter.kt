@@ -1,23 +1,22 @@
 package com.betasoft.appdemo.ui.adpter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.betasoft.appdemo.data.api.model.ImageLocal
 import com.betasoft.appdemo.databinding.ItemImageMyfileBinding
+import com.betasoft.appdemo.utils.Utils
 import javax.inject.Inject
 
 class MyFileAdapter
 @Inject
 constructor() : PagingDataAdapter<ImageLocal, MyFileAdapter.ImageLocalViewHolder>(DiffUtils) {
 
-    private var listener: OnClickItemListeners? = null
-
-    fun setListener(listener: OnClickItemListeners) {
-        this.listener = listener
-    }
+    var onClickItem: ((ImageLocal) -> Unit)? = null
+    var onClickMore: ((View,ImageLocal) -> Unit)? = null
 
     inner class ImageLocalViewHolder(private val binding: ItemImageMyfileBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -25,7 +24,12 @@ constructor() : PagingDataAdapter<ImageLocal, MyFileAdapter.ImageLocalViewHolder
             binding.apply {
                 binding.item = image
                 binding.root.setOnClickListener {
-                    listener?.onClickItemListeners(image)
+                    onClickItem?.invoke(image)
+                }
+
+                binding.imageMore.setOnClickListener {
+                    onClickMore?.invoke(it,image)
+                    val bitmap = binding.imgRoot.drawable
                 }
             }
         }
@@ -59,7 +63,5 @@ constructor() : PagingDataAdapter<ImageLocal, MyFileAdapter.ImageLocalViewHolder
         )
     }
 
-    interface OnClickItemListeners {
-        fun onClickItemListeners(imageLocal: ImageLocal)
-    }
+
 }

@@ -53,8 +53,19 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
                     prompt = it.prompt.toString()
                 )
             }
-        }
 
+            listSelect = {
+                listItemSelect.clear()
+                listItemSelect.addAll(it)
+            }
+
+            listSelected = {
+                mViewModel.updateListItemSelected(it)
+                listItemSelected.clear()
+                listItemSelected.addAll(it)
+            }
+
+        }
     }
 
     override fun getLayout(): Int {
@@ -94,20 +105,10 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
             updateUnSelect()
         }
 
-        imageAdapter.listSelect = {
-            listItemSelect.clear()
-            listItemSelect.addAll(it)
-        }
-
-        imageAdapter.listSelected = {
-            mViewModel.updateListItemSelected(it)
-            listItemSelected.clear()
-            listItemSelected.addAll(it)
-        }
 
         binding.btnMutableDownLoad.setOnClickListener {
             if (listItemSelect.size > 0) {
-
+                mViewModel.downloadImagesUrl(listItemSelected, true, requireContext())
             }
         }
 
@@ -170,11 +171,24 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
             }
         }
 
-        mViewModel.isSelectLiveData.observe(this) {
-            if (it) {
-                binding.cardMutableDownload.visibility = View.VISIBLE
-            } else {
-                binding.cardMutableDownload.visibility = View.GONE
+        mViewModel.downloadImagesLiveData.observe(this) {
+            it?.let {
+                when (it.loadingStatus) {
+                    LoadingStatus.Success -> {
+                        ToastUtils.getInstance(requireContext()).showToast("DownloadSuccess")
+                        val body = (it as DataResponse.DataSuccess).body
+                        if (body != null && body.isNotEmpty()) {
+                            mViewModel.insertImagesLocal(body)
+                        }
+                        updateUnSelect()
+                    }
+                    LoadingStatus.Error -> {
+                        ToastUtils.getInstance(requireContext()).showToast("image already exists")
+                    }
+                    else -> {
+
+                    }
+                }
             }
         }
 

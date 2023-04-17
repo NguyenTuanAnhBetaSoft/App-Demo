@@ -36,6 +36,8 @@ class HomeViewModel @Inject constructor(
     }
 
     val downloadImageLiveData = MutableLiveData<DataResponse<ImageLocal>?>(DataResponse.DataIdle())
+    val downloadImagesLiveData =
+        MutableLiveData<DataResponse<List<ImageLocal>?>>(DataResponse.DataIdle())
 
     val listItemSelectedLiveData = MutableLiveData<List<ItemsItem>?>()
 
@@ -44,6 +46,7 @@ class HomeViewModel @Inject constructor(
 
     private var jobFetchImageList: Job? = null
     private var jobDownloadImageUrl: Job? = null
+    private var jobDownloadImagesUrl: Job? = null
     private var jobInsertImageLocal: Job? = null
 
     fun canJobFetchImageList() {
@@ -52,6 +55,10 @@ class HomeViewModel @Inject constructor(
 
     fun canJobDownloadImageUrl() {
         jobDownloadImageUrl?.cancel()
+    }
+
+    fun canJobDownloadImagesUrl() {
+        jobDownloadImagesUrl?.cancel()
     }
 
     fun canJobInsertImageLocal() {
@@ -141,10 +148,52 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun downloadImagesUrl(
+        item: List<ItemsItem>,
+        haveSave: Boolean,
+        context: Context
+    ) {
+        downloadImagesLiveData.value = DataResponse.DataLoading(LoadingStatus.Loading)
+        jobDownloadImagesUrl = viewModelScope.launch {
+            val result = localRepository.downloadImagesUrl(item, haveSave, context)
+            if (result != null && result.isNotEmpty()) {
+                val listImageLocal = mutableListOf<ImageLocal>()
+                result.forEachIndexed { index, s ->
+                    if (s.isNotEmpty()) {
+                        val itemImageLocal = ImageLocal(
+                            filePath = s,
+                            nameAuthor = item[index].userProfile!!.name.toString(),
+                            prompt = item[index].prompt.toString(),
+                            fileName = item[index].id.toString()
+                        )
+                        listImageLocal.add(itemImageLocal)
+                    }
+                }
+                downloadImagesLiveData.postValue(DataResponse.DataSuccess(listImageLocal))
+            } else {
+                downloadImageLiveData.postValue(DataResponse.DataError(null))
+            }
+        }
+    }
+
     fun insertImageLocal(imageLocal: ImageLocal) {
         jobInsertImageLocal = viewModelScope.launch {
             try {
                 localRepository.insertImageLocal(imageLocal)
+            } catch (_: Exception) {
+
+            }
+        }
+
+    }
+
+    fun insertImagesLocal(imagesLocal: List<ImageLocal>) {
+        jobInsertImageLocal = viewModelScope.launch {
+            try {
+                imagesLocal.forEachIndexed { _, imageLocal ->
+                    localRepository.insertImageLocal(imageLocal)
+                }
+
             } catch (_: Exception) {
 
             }

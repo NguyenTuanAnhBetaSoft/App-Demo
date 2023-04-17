@@ -2,6 +2,7 @@ package com.betasoft.appdemo.data.repository
 
 import android.content.Context
 import com.betasoft.appdemo.data.api.model.ImageLocal
+import com.betasoft.appdemo.data.api.responseremote.ItemsItem
 import com.betasoft.appdemo.data.local.roomDb.dao.ImageLocalDao
 import com.betasoft.appdemo.utils.download.DownloadUrl
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +14,20 @@ import javax.inject.Singleton
 class LocalRepository @Inject constructor(private val imageLocalDao: ImageLocalDao) {
 
     suspend fun insertImageLocal(image: ImageLocal) = withContext(Dispatchers.Default) {
-        imageLocalDao.insert(image)
+        try {
+            imageLocalDao.insert(image)
+        } catch (_: Exception) {
+
+        }
+
+    }
+
+    suspend fun deleteImageLocal(image: ImageLocal) = withContext(Dispatchers.Default) {
+        try {
+            imageLocalDao.delete(image)
+        } catch (_: Exception) {
+
+        }
     }
 
     suspend fun downloadImageUrl(
@@ -27,5 +41,30 @@ class LocalRepository @Inject constructor(private val imageLocalDao: ImageLocalD
         } catch (ex: Exception) {
             return@withContext null
         }
+    }
+
+    suspend fun downloadImagesUrl(
+        item: List<ItemsItem>,
+        haveSave: Boolean,
+        context: Context
+    ) = withContext(Dispatchers.IO) {
+        val listDownLoad = arrayListOf<String>()
+        try {
+            item.forEachIndexed { _, itemsItem ->
+                val result = DownloadUrl.download(
+                    itemsItem.image_url.toString(),
+                    itemsItem.id.toString(),
+                    haveSave,
+                    context
+                )
+
+                listDownLoad.add(result)
+
+            }
+            listDownLoad
+        } catch (ex: Exception) {
+            return@withContext null
+        }
+
     }
 }

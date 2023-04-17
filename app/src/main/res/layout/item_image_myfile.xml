@@ -35,14 +35,27 @@
             style="@style/TextAppearance.Bold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/dp_10"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_4"
             android:gravity="start"
             android:lines="1"
             android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/imageMore"
             app:layout_constraintStart_toEndOf="@id/imgRoot"
             app:layout_constraintTop_toTopOf="parent"
             app:setTextNameAuthor="@{item.nameAuthor}" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageMore"
+            android:paddingVertical="@dimen/dp_10"
+            android:paddingHorizontal="@dimen/dp_14"
+            android:src="@drawable/ic_more"
+            android:background="@drawable/my_ripple"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/tvPrompt"
@@ -52,10 +65,11 @@
             android:layout_marginTop="@dimen/dp_6"
             android:gravity="start|top"
             android:maxLines="3"
-            android:layout_marginHorizontal="@dimen/dp_10"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_4"
             android:text="@{item.prompt}"
             android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/imageMore"
             app:layout_constraintStart_toEndOf="@id/imgRoot"
             app:layout_constraintTop_toBottomOf="@id/tvName" />
 

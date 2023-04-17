@@ -16,7 +16,7 @@ import java.io.OutputStream
 
 object ImageUtils {
 
-    fun saveMediaToStorage(bitmap: Bitmap, name: String, context: Context): String? {
+    fun saveMediaToStorage(bitmap: Bitmap, name: String, context: Context): String {
         // Generating a file name
         var result = ""
         val filename = "${name}${Constants.TYPE_JPG}"
