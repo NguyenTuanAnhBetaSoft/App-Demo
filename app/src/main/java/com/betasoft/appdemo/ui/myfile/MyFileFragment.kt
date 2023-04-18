@@ -1,14 +1,7 @@
 package com.betasoft.appdemo.ui.myfile
 
-import android.annotation.SuppressLint
-import android.graphics.drawable.InsetDrawable
-import android.os.Build
-import android.util.TypedValue
-import android.view.MenuItem
 import android.view.View
-import android.widget.PopupMenu
-import androidx.annotation.MenuRes
-import androidx.appcompat.view.menu.MenuBuilder
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -19,13 +12,15 @@ import com.betasoft.appdemo.data.api.model.ImageLocal
 import com.betasoft.appdemo.databinding.FragmentMyFileBinding
 import com.betasoft.appdemo.ui.adpter.MyFileAdapter
 import com.betasoft.appdemo.ui.base.AbsBaseFragment
+import com.betasoft.appdemo.ui.base.popup.ActionAdapter
+import com.betasoft.appdemo.ui.base.popup.ListActionPopup
 import com.betasoft.appdemo.ui.home.HomeFragmentDirections
+import com.betasoft.appdemo.utils.Constants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -38,11 +33,16 @@ class MyFileFragment : AbsBaseFragment<FragmentMyFileBinding>() {
 
     private lateinit var mLayoutManager: LinearLayoutManager
 
+    private val listActionPopup by lazy {
+        ListActionPopup(requireContext())
+    }
+
     override fun getLayout(): Int {
         return R.layout.fragment_my_file
     }
 
     override fun initView() {
+        onBackPressed()
         initRecycleView()
         configureStateListener()
         observer()
@@ -81,7 +81,8 @@ class MyFileFragment : AbsBaseFragment<FragmentMyFileBinding>() {
         }
 
         myFileAdapter.onClickMore = { view, image ->
-            showPopupMenu(view, R.menu.popup_menu, image)
+            showPopup(view, image)
+
         }
 
     }
@@ -131,12 +132,30 @@ class MyFileFragment : AbsBaseFragment<FragmentMyFileBinding>() {
             }
         }
     }
-    ////
+
+    private fun showPopup(view: View, image: ImageLocal) {
+        listActionPopup.showPopup(view, Constants.actionMore,
+            object : ActionAdapter.OnActionClickListener {
+                override fun onItemActionClick(position: Int) {
+                    when (position) {
+                        0 -> {
+                            val listFile = mutableListOf<ImageLocal>()
+                            listFile.add(image)
+                            mViewModel.shareFiles(requireActivity(), listFile)
+                            //mViewModel.shareFiles(imageLocal.fileName, requireContext())
+                        }
+                        1 -> {
+                            showDialogDelete(image)
+                        }
+                    }
+                }
+
+            })
+    }
 
     private fun refreshData() {
         lifecycleScope.launch {
             mViewModel.getAllImageLocal().collectLatest { response ->
-                Timber.d("onCreate: $response")
                 myFileAdapter.submitData(response)
             }
         }
@@ -150,56 +169,6 @@ class MyFileFragment : AbsBaseFragment<FragmentMyFileBinding>() {
         }
     }
 
-
-    @SuppressLint("RestrictedApi")
-    private fun showPopupMenu(v: View, @MenuRes menuRes: Int, imageLocal: ImageLocal) {
-        val popup = PopupMenu(requireContext(), v)
-        popup.menuInflater.inflate(menuRes, popup.menu)
-        if (popup.menu is MenuBuilder) {
-            val menuBuilder = popup.menu as MenuBuilder
-            menuBuilder.setOptionalIconsVisible(true)
-            for (item in menuBuilder.visibleItems) {
-                val iconMarginPx =
-                    TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP, (6).toFloat(), resources.displayMetrics
-                    )
-                        .toInt()
-                if (item.icon != null) {
-                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                        item.icon = InsetDrawable(item.icon, iconMarginPx, 0, iconMarginPx, 0)
-                    } else {
-                        item.icon =
-                            object : InsetDrawable(item.icon, iconMarginPx, 0, iconMarginPx, 0) {
-                                override fun getIntrinsicWidth(): Int {
-                                    return intrinsicHeight + iconMarginPx + iconMarginPx
-                                }
-                            }
-                    }
-                }
-            }
-        }
-        popup.setOnMenuItemClickListener { menuItem: MenuItem ->
-            // Respond to menu item click.
-            when (menuItem.itemId) {
-                R.id.share -> {
-                    /*val bitmap = binding.item.getDrawable().bitmap
-
-                    ShareFile.shareImageandText(bitmap)*/
-                    true
-                }
-                R.id.delete -> {
-                    showDialogDelete(imageLocal)
-                    true
-                }
-                else -> false
-            }
-        }
-        popup.setOnDismissListener {
-            // Respond to popup being dismissed.
-        }
-
-        popup.show()
-    }
 
     private fun showDialogDelete(imageLocal: ImageLocal) {
         MaterialAlertDialogBuilder(requireContext())
@@ -219,6 +188,18 @@ class MyFileFragment : AbsBaseFragment<FragmentMyFileBinding>() {
 
             }
             .show()
+    }
+
+    private fun onBackPressed() {
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (listActionPopup.isShowing()) {
+                    listActionPopup.dismiss()
+                }
+            }
+
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
 }

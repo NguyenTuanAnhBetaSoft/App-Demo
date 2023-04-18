@@ -2,7 +2,6 @@ package com.betasoft.appdemo.ui.openart
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController

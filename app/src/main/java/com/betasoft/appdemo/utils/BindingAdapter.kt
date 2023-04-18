@@ -1,11 +1,13 @@
 package com.betasoft.appdemo.utils
 
 import android.net.Uri
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.betasoft.appdemo.R
 import com.betasoft.appdemo.li.TouchImageView
+import com.betasoft.appdemo.ui.base.popup.ActionModel
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
@@ -60,6 +62,17 @@ fun TouchImageView.bindTouchImage(uri: String?) {
         Glide.with(this).load(androidx.appcompat.R.color.background_floating_material_dark)
             .error(androidx.appcompat.R.color.background_floating_material_dark)
             .into(this)
+    }
+
+}
+
+@BindingAdapter("android:iconForAction")
+fun ImageView.iconForAction(actionModel: ActionModel) {
+    if (actionModel.icon <0) {
+        visibility = View.GONE
+    } else {
+        visibility = View.VISIBLE
+        setImageResource(actionModel.icon)
     }
 
 }

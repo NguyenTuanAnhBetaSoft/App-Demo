@@ -11,4 +11,5 @@
     <dimen name="dp_30">30dp</dimen>
     <dimen name="dp_14">14dp</dimen>
     <dimen name="dp_4">4dp</dimen>
+    <dimen name="popup_dialog_width">200dp</dimen>
 </resources>

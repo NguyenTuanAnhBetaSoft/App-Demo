@@ -1,5 +1,6 @@
 package com.betasoft.appdemo.ui.myfile
 
+import android.app.Activity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -8,9 +9,11 @@ import androidx.paging.PagingData
 import com.betasoft.appdemo.data.api.model.ImageLocal
 import com.betasoft.appdemo.data.local.roomDb.dao.ImageLocalDao
 import com.betasoft.appdemo.data.repository.LocalRepository
+import com.betasoft.appdemo.extensions.shareMultiple
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,5 +37,25 @@ class MyFileViewModel @Inject constructor(
             localRepository.deleteImageLocal(imageLocal)
         }
     }
+
+    fun shareFiles(
+        activity: Activity,
+        listFile: List<ImageLocal>
+    ) {
+        val listPath = listFile.flatMap {
+            val list = mutableListOf<String>()
+            val filePath = File(it.filePath)
+            list.add(filePath.path)
+            list
+        }
+
+        activity.shareMultiple(listPath)
+    }
+
+    /*fun shareFiles(
+        file: String, context: Context
+    ) {
+        Utils.openShareWindow(context, file)
+    }*/
 
 }
