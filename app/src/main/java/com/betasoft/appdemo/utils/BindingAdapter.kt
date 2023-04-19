@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.betasoft.appdemo.R
+import com.betasoft.appdemo.data.model.MediaModel
 import com.betasoft.appdemo.li.TouchImageView
 import com.betasoft.appdemo.ui.base.popup.ActionModel
 import com.bumptech.glide.Glide
@@ -18,6 +19,20 @@ fun ShapeableImageView.loadImageByUrl(url: String) {
         .placeholder(R.drawable.ic_image_empty)
         .error(R.drawable.ic_image_empty)
         .into(this)
+}
+
+@BindingAdapter("android:bindThumbnailFile")
+fun ImageView.bindThumbnailFile(mediaModel: MediaModel?) {
+    if (mediaModel != null) {
+        Glide.with(this).load(mediaModel.file)
+            .placeholder(R.drawable.ic_image_empty)
+            .error(R.drawable.ic_image_empty).into(this)
+    } else {
+        Glide.with(this).load(R.drawable.ic_image_empty)
+            .placeholder(R.drawable.ic_image_empty)
+            .error(R.drawable.ic_image_empty).into(this)
+    }
+
 }
 
 

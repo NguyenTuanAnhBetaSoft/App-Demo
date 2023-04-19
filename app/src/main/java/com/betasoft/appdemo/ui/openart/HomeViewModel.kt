@@ -2,8 +2,8 @@ package com.betasoft.appdemo.ui.openart
 
 import android.content.Context
 import androidx.lifecycle.*
-import com.betasoft.appdemo.data.api.model.ImageLocal
-import com.betasoft.appdemo.data.api.model.ImageResult
+import com.betasoft.appdemo.data.model.ImageLocal
+import com.betasoft.appdemo.data.model.ImageResult
 import com.betasoft.appdemo.data.api.responseremote.ItemsItem
 import com.betasoft.appdemo.data.repository.LocalRepository
 import com.betasoft.appdemo.data.repository.RemoteRepository

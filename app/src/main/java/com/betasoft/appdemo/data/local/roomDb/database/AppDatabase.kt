@@ -2,7 +2,7 @@ package com.betasoft.appdemo.data.local.roomDb.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.betasoft.appdemo.data.api.model.ImageLocal
+import com.betasoft.appdemo.data.model.ImageLocal
 import com.betasoft.appdemo.data.local.roomDb.dao.ImageLocalDao
 
 

@@ -3,7 +3,7 @@ package com.betasoft.appdemo.data.local.roomDb.dao
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
-import com.betasoft.appdemo.data.api.model.ImageLocal
+import com.betasoft.appdemo.data.model.ImageLocal
 
 @Dao
 interface ImageLocalDao : BaseDao<ImageLocal> {

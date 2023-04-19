@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.betasoft.appdemo.data.api.model.ImageLocal
+import com.betasoft.appdemo.data.model.ImageLocal
 import com.betasoft.appdemo.data.local.roomDb.dao.ImageLocalDao
 import com.betasoft.appdemo.data.repository.LocalRepository
 import com.betasoft.appdemo.extensions.shareMultiple

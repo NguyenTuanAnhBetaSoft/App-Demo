@@ -8,7 +8,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.betasoft.appdemo.R
-import com.betasoft.appdemo.data.api.model.ImageLocal
+import com.betasoft.appdemo.data.model.ImageLocal
 import com.betasoft.appdemo.databinding.FragmentMyFileBinding
 import com.betasoft.appdemo.ui.adpter.MyFileAdapter
 import com.betasoft.appdemo.ui.base.AbsBaseFragment
@@ -195,6 +195,8 @@ class MyFileFragment : AbsBaseFragment<FragmentMyFileBinding>() {
             override fun handleOnBackPressed() {
                 if (listActionPopup.isShowing()) {
                     listActionPopup.dismiss()
+                } else {
+                    requireActivity().finish()
                 }
             }
 

@@ -1,15 +1,16 @@
 package com.betasoft.appdemo.ui.home
 
 import android.view.View
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.betasoft.appdemo.R
 import com.betasoft.appdemo.databinding.FragmentHomeBinding
 import com.betasoft.appdemo.ui.base.AbsBaseFragment
 import com.betasoft.appdemo.ui.myfile.MyFileFragment
 import com.betasoft.appdemo.ui.openart.OpenArtFragment
+import com.betasoft.appdemo.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -23,10 +24,18 @@ class HomeFragment : AbsBaseFragment<FragmentHomeBinding>() {
     }
 
     override fun initView() {
-
         observer()
         initViewPager()
-        onBackPressed()
+
+        binding.toolbarHome.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.setting -> {
+                    findNavController().navigate(HomeFragmentDirections.actionGlobalAllImageFragment())
+                    true
+                }
+                else -> false
+            }
+        }
 
     }
 
@@ -67,15 +76,6 @@ class HomeFragment : AbsBaseFragment<FragmentHomeBinding>() {
         }
     }
 
-    private fun onBackPressed() {
-        val onBackPressedCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                requireActivity().finish()
-            }
-
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
-    }
 
     private fun observer() {
         activity?.let {

@@ -6,7 +6,7 @@
 
         <variable
             name="item"
-            type="com.betasoft.appdemo.data.api.model.ImageLocal" />
+            type="com.betasoft.appdemo.data.model.ImageLocal" />
 
         <import type="android.view.View" />
 

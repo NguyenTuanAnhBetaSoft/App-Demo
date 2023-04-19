@@ -1,7 +1,7 @@
 package com.betasoft.appdemo.data.repository
 
 import android.content.Context
-import com.betasoft.appdemo.data.api.model.ImageLocal
+import com.betasoft.appdemo.data.model.ImageLocal
 import com.betasoft.appdemo.data.api.responseremote.ItemsItem
 import com.betasoft.appdemo.data.local.roomDb.dao.ImageLocalDao
 import com.betasoft.appdemo.utils.download.DownloadUrl

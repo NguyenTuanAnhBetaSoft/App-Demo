@@ -1,5 +1,7 @@
 package com.betasoft.appdemo.data.response
 
+import okhttp3.ResponseBody
+
 sealed class DataResponse<T> constructor(val loadingStatus: LoadingStatus) {
     class DataLoading<T>(loadingType: LoadingStatus) : DataResponse<T>(loadingType)
     class DataIdle<T> : DataResponse<T>(LoadingStatus.Idle)

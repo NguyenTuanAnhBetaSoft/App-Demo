@@ -1,4 +1,4 @@
-package com.betasoft.appdemo.data.api.model
+package com.betasoft.appdemo.data.model
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo

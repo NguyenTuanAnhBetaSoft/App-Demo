@@ -1,4 +1,4 @@
-package com.betasoft.appdemo.data.api.model
+package com.betasoft.appdemo.data.model
 
 import com.betasoft.appdemo.data.api.responseremote.ItemsItem
 
