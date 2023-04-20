@@ -44,5 +44,11 @@
         tools:layout="@layout/fragment_media"
         android:id="@+id/allImageFragment"
         android:name="com.betasoft.appdemo.ui.media.MediaFragment"
-        android:label="AllImageFragment" /><action android:id="@+id/action_global_allImageFragment" app:destination="@id/allImageFragment"/>
+        android:label="AllImageFragment" >
+
+        <argument
+            android:name="param"
+            app:argType="integer" />
+    </fragment>
+    <action android:id="@+id/action_global_mediaFragment" app:destination="@id/allImageFragment"/>
 </navigation>

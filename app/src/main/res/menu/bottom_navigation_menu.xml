@@ -16,6 +16,12 @@
             android:icon="@drawable/ic_file"
             android:title="@string/my_file" />
 
+        <item
+            android:id="@+id/tast2Fragment"
+            android:enabled="true"
+            android:icon="@drawable/ic_file"
+            android:title="Tast2" />
+
     </group>
 
 </menu>

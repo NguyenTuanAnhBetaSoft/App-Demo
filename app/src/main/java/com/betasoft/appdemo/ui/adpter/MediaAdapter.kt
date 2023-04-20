@@ -1,15 +1,14 @@
 package com.betasoft.appdemo.ui.adpter
 
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.betasoft.appdemo.data.model.ImageLocal
 import com.betasoft.appdemo.data.model.MediaModel
-import com.betasoft.appdemo.databinding.ItemAllImageBinding
-import com.betasoft.appdemo.databinding.ItemImageMyfileBinding
+import com.betasoft.appdemo.databinding.ItemMediaBinding
+import com.betasoft.appdemo.extensions.getDuration
 import javax.inject.Inject
 
 class MediaAdapter
@@ -19,14 +18,23 @@ constructor() : PagingDataAdapter<MediaModel, MediaAdapter.MediaViewHolder>(Diff
     var onClickItem: ((MediaModel) -> Unit)? = null
 
 
-    inner class MediaViewHolder(private val binding: ItemAllImageBinding) :
+    inner class MediaViewHolder(private val binding: ItemMediaBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(image: MediaModel) {
-            binding.apply {
-                binding.item = image
+        fun bind(media: MediaModel) {
 
-                binding.root.setOnClickListener {
-                    onClickItem?.invoke(image)
+            binding.apply {
+                binding.item = media
+                if (media.duration != 0L) {
+                    binding.isVideo = true
+                    binding.videoDuration.text = media.duration.getDuration()
+                } else {
+                    binding.isVideo = false
+                }
+
+                Log.d("54354", "item = ${media.duration.toString()}")
+
+                binding.imgRoot.setOnClickListener {
+                    onClickItem?.invoke(media)
                 }
 
 
@@ -54,7 +62,7 @@ constructor() : PagingDataAdapter<MediaModel, MediaAdapter.MediaViewHolder>(Diff
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {
         return MediaViewHolder(
-            ItemAllImageBinding.inflate(
+            ItemMediaBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false

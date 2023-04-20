@@ -6,6 +6,7 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.betasoft.appdemo.R
@@ -22,6 +23,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MediaFragment : AbsBaseFragment<FragmentMediaBinding>() {
+    private val args: MediaFragmentArgs by navArgs()
+
     @Inject
     lateinit var mediaAdapter: MediaAdapter
 
@@ -47,14 +50,26 @@ class MediaFragment : AbsBaseFragment<FragmentMediaBinding>() {
         return R.layout.fragment_media
     }
 
+
     override fun initView() {
+        Log.d("fadsfd", "param = ${args.param}")
+        when(args.param) {
+
+            1 -> {
+                refreshDataVideo()
+            }
+            2 -> {
+                refreshDataImage()
+            }
+
+        }
         observer()
-        mViewModel.fetAllImage()
+
         initRecycleView()
-        refreshData()
+
 
         mediaAdapter.onClickItem = {
-
+            ToastUtils.getInstance(requireContext()).showToast("$it")
         }
     }
 
@@ -84,9 +99,18 @@ class MediaFragment : AbsBaseFragment<FragmentMediaBinding>() {
 
     }
 
-    private fun refreshData() {
+    private fun refreshDataImage() {
         lifecycleScope.launch {
-            mViewModel.fetAllImage().collectLatest { response ->
+            mViewModel.fetAllImages().collectLatest { response ->
+                Log.d("gffds", "respon ${response.toString()}")
+                mediaAdapter.submitData(response)
+            }
+        }
+    }
+
+    private fun refreshDataVideo() {
+        lifecycleScope.launch {
+            mViewModel.fetAllVideos().collectLatest { response ->
                 Log.d("gffds", "respon ${response.toString()}")
                 mediaAdapter.submitData(response)
             }

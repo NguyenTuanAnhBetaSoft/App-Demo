@@ -15,4 +15,7 @@ object AppConfig {
             MediaStore.VOLUME_EXTERNAL
         )
     } else MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+
+    const val FORMAT_DURATION_UNDER_HOUR = "%2d:%02d"
+    const val FORMAT_DURATION_UPPER_HOUR = "%2d:%02d:%02d"
 }

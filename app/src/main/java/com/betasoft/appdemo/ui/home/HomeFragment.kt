@@ -10,6 +10,7 @@ import com.betasoft.appdemo.databinding.FragmentHomeBinding
 import com.betasoft.appdemo.ui.base.AbsBaseFragment
 import com.betasoft.appdemo.ui.myfile.MyFileFragment
 import com.betasoft.appdemo.ui.openart.OpenArtFragment
+import com.betasoft.appdemo.ui.tast2.Tast2Fragment
 import com.betasoft.appdemo.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -30,7 +31,6 @@ class HomeFragment : AbsBaseFragment<FragmentHomeBinding>() {
         binding.toolbarHome.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.setting -> {
-                    findNavController().navigate(HomeFragmentDirections.actionGlobalAllImageFragment())
                     true
                 }
                 else -> false
@@ -43,7 +43,8 @@ class HomeFragment : AbsBaseFragment<FragmentHomeBinding>() {
         // Define fragments to display in viewPager2
         val listOfFragments = arrayListOf<Fragment>(
             OpenArtFragment(),
-            MyFileFragment()
+            MyFileFragment(),
+            Tast2Fragment()
         )
         binding.viewPager.adapter =
             ViewPagerHomeAdapter(listOfFragments, childFragmentManager, lifecycle)
@@ -54,6 +55,8 @@ class HomeFragment : AbsBaseFragment<FragmentHomeBinding>() {
                     0 -> binding.bottomNavigation.menu.findItem(R.id.openArtFragment).isChecked =
                         true
                     1 -> binding.bottomNavigation.menu.findItem(R.id.myFileFragment).isChecked =
+                        true
+                    2 -> binding.bottomNavigation.menu.findItem(R.id.tast2Fragment).isChecked =
                         true
                 }
             }
@@ -69,6 +72,11 @@ class HomeFragment : AbsBaseFragment<FragmentHomeBinding>() {
                 }
                 R.id.myFileFragment -> {
                     binding.viewPager.setCurrentItem(1, true)
+                    return@setOnItemSelectedListener true
+                }
+
+                R.id.tast2Fragment -> {
+                    binding.viewPager.setCurrentItem(2, true)
                     return@setOnItemSelectedListener true
                 }
             }

@@ -3,6 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        
+        <variable
+            name="isVideo"
+            type="Boolean" />
 
         <variable
             name="item"
@@ -15,17 +19,34 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/dp_1"
-        android:background="?selectableItemBackground">
+        android:padding="@dimen/dp_1">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgRoot"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:foreground="?selectableItemBackground"
             app:layout_constraintDimensionRatio="1:1"
             android:scaleType="centerCrop"
             android:bindThumbnailFile="@{item}" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/video_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/dp_4"
+            android:background="@drawable/bg_duaration_video"
+            android:textColor="@color/white"
+            android:paddingStart="4dp"
+            android:paddingEnd="5dp"
+            android:text="fdsfsdfsd"
+            android:visibility="@{isVideo? View.VISIBLE:View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="3dp"
+            android:layout_marginEnd="3dp"
+             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

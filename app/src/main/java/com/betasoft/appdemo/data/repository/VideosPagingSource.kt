@@ -9,7 +9,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ImagesPagingSource @Inject constructor(
+class VideosPagingSource @Inject constructor(
     private val localStorage: MediaLoader
 ) : PagingSource<Int, MediaModel>() {
     override fun getRefreshKey(state: PagingState<Int, MediaModel>): Int? {
@@ -22,18 +22,18 @@ class ImagesPagingSource @Inject constructor(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MediaModel> {
         val position = params.key ?: -1
         return try {
-            val images: MutableList<MediaModel> = mutableListOf()
+            val videos: MutableList<MediaModel> = mutableListOf()
             localStorage.getListFromUri(
                 imagesOffset = position,
                 imagesLimit = params.loadSize,
-                AppConfig.IMAGES_MEDIA_URI, MediaLoader.typeImage
+                AppConfig.VIDEO_MEDIA_URI, MediaLoader.typeVideo
             ).collect { imageDataList ->
-                images.addAll(imageDataList)
+                videos.addAll(imageDataList)
             }
             LoadResult.Page(
-                data = images,
+                data = videos,
                 prevKey = if (position == -1) null else position,
-                nextKey = if (images.isEmpty()) null else position + params.loadSize
+                nextKey = if (videos.isEmpty()) null else position + params.loadSize
             )
         } catch (exception: Exception) {
             LoadResult.Error(exception)
