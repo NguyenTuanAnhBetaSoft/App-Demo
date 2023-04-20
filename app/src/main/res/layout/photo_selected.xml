@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.betasoft.appdemo.data.model.MediaModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_layout_photo_selected"
+        android:padding="@dimen/dp_16">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageRoot"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:elevation="@dimen/dp_10"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
+            app:shapeAppearanceOverlay="@style/rounded_corner_8" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageRoot2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="@dimen/dp_12"
+            android:elevation="@dimen/dp_8"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
+            app:shapeAppearanceOverlay="@style/rounded_corner_7" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageRoot3"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="24dp"
+            android:elevation="6dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
+            app:shapeAppearanceOverlay="@style/rounded_corner_6" />
+
+        <TextView
+            android:id="@+id/tvPtSelected"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnCast"
+            app:layout_constraintStart_toEndOf="@id/imageRoot"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCast"
+            android:layout_width="88dp"
+            android:layout_height="32dp"
+            android:background="@drawable/bg_button_cast"
+            android:drawableStart="@drawable/ic_mirroring"
+            android:foreground="@drawable/my_ripple_button"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="4dp"
+            android:text="@string/cast"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

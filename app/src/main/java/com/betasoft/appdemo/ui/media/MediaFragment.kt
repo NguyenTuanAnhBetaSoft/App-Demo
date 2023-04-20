@@ -1,20 +1,25 @@
 package com.betasoft.appdemo.ui.media
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.betasoft.appdemo.R
+import com.betasoft.appdemo.data.model.MediaModel
 import com.betasoft.appdemo.databinding.FragmentMediaBinding
 import com.betasoft.appdemo.ui.adpter.MediaAdapter
 import com.betasoft.appdemo.ui.base.AbsBaseFragment
-import com.betasoft.appdemo.utils.ToastUtils
+import com.betasoft.appdemo.ui.home.HomeFragmentDirections
 import com.betasoft.appdemo.utils.Utils
+import com.betasoft.appdemo.utils.bindThumbnailFile
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -23,6 +28,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MediaFragment : AbsBaseFragment<FragmentMediaBinding>() {
+    private var listItemSelected = mutableListOf<MediaModel>()
+
     private val args: MediaFragmentArgs by navArgs()
 
     @Inject
@@ -39,7 +46,7 @@ class MediaFragment : AbsBaseFragment<FragmentMediaBinding>() {
                     Utils.getStoragePermissions()
                 )
             } else {
-                ToastUtils.getInstance(requireContext()).showToast("ahihih")
+
             }
         }
 
@@ -51,15 +58,19 @@ class MediaFragment : AbsBaseFragment<FragmentMediaBinding>() {
     }
 
 
+    @SuppressLint("SetTextI18n")
     override fun initView() {
-        Log.d("fadsfd", "param = ${args.param}")
-        when(args.param) {
+        binding.viewModel = mViewModel
+        onBackPressed()
+        when (args.param) {
 
             1 -> {
+                binding.tvToolbar.text = "Videos"
                 refreshDataVideo()
             }
             2 -> {
                 refreshDataImage()
+                binding.tvToolbar.text = "Photos"
             }
 
         }
@@ -67,9 +78,12 @@ class MediaFragment : AbsBaseFragment<FragmentMediaBinding>() {
 
         initRecycleView()
 
+        binding.lPhotoSelected.btnCast.setOnClickListener {
+            findNavController().navigate(HomeFragmentDirections.actionGlobalPhotoCastFragment())
+        }
 
-        mediaAdapter.onClickItem = {
-            ToastUtils.getInstance(requireContext()).showToast("$it")
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
         }
     }
 
@@ -84,7 +98,37 @@ class MediaFragment : AbsBaseFragment<FragmentMediaBinding>() {
         )
     }
 
+    @SuppressLint("SetTextI18n")
     private fun observer() {
+        mViewModel.listItemSelectedLiveData.observe(this) {
+            it?.let {
+                if (mediaAdapter.isSelect()) {
+                    mViewModel.isSelect(true)
+                    val total = it.size
+                    binding.lPhotoSelected.tvPtSelected.text = "$total photos selected"
+                } else {
+                    mViewModel.isSelect(false)
+                }
+            }
+        }
+
+        mViewModel.isSelectLiveData.observe(this) { isSelected ->
+            if (isSelected) {
+                binding.lPhotoSelected.imageRoot.visibility = View.GONE
+                binding.lPhotoSelected.imageRoot2.visibility = View.GONE
+                binding.lPhotoSelected.imageRoot3.visibility = View.GONE
+
+                for (i in 0 until minOf(listItemSelected.size, 3)) {
+                    val imageRoot = when (i) {
+                        0 -> binding.lPhotoSelected.imageRoot
+                        1 -> binding.lPhotoSelected.imageRoot2
+                        else -> binding.lPhotoSelected.imageRoot3
+                    }
+                    imageRoot.visibility = View.VISIBLE
+                    imageRoot.bindThumbnailFile(listItemSelected[listItemSelected.lastIndex - i])
+                }
+            }
+        }
 
     }
 
@@ -97,12 +141,21 @@ class MediaFragment : AbsBaseFragment<FragmentMediaBinding>() {
 
         }
 
+        mediaAdapter.onClickItem = {
+            Log.d("6656565", "mediaClick = $it")
+        }
+
+        mediaAdapter.listSelected = {
+            mViewModel.updateListItemSelected(it)
+            listItemSelected.clear()
+            listItemSelected.addAll(it)
+        }
+
     }
 
     private fun refreshDataImage() {
         lifecycleScope.launch {
             mViewModel.fetAllImages().collectLatest { response ->
-                Log.d("gffds", "respon ${response.toString()}")
                 mediaAdapter.submitData(response)
             }
         }
@@ -111,10 +164,33 @@ class MediaFragment : AbsBaseFragment<FragmentMediaBinding>() {
     private fun refreshDataVideo() {
         lifecycleScope.launch {
             mViewModel.fetAllVideos().collectLatest { response ->
-                Log.d("gffds", "respon ${response.toString()}")
                 mediaAdapter.submitData(response)
             }
         }
+    }
+
+    private fun onBackPressed() {
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (mediaAdapter.isSelect()) {
+                    updateUnSelect()
+                } else {
+                    if (isAdded) {
+                        findNavController().popBackStack()
+                    }
+                }
+            }
+
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun updateUnSelect() {
+        mViewModel.isSelect(false)
+        mediaAdapter.setSelect(false)
+        mediaAdapter.notifyDataSetChanged()
+        mediaAdapter.cleanListItemChecked()
     }
 
 }

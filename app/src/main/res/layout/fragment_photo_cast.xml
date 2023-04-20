@@ -4,11 +4,6 @@
 
     <data>
 
-        <variable
-            name="viewModel"
-            type="com.betasoft.appdemo.ui.media.MediaLocalViewModel" />
-
-        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,10 +11,19 @@
         android:layout_height="match_parent"
         android:background="#020207">
 
+        <com.betasoft.appdemo.li.TouchImageView
+            android:id="@+id/touch_imageview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toTopOf="@id/rV"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:background="@color/transparent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_arrow">
 
@@ -34,22 +38,11 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rV"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="50dp"
+            android:layout_marginVertical="@dimen/dp_16"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" />
-
-        <include
-            android:id="@+id/lPhotoSelected"
-            layout="@layout/photo_selected"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:visibility="@{viewModel.isSelectLiveData() ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.96" />
-
+            app:layout_constraintTop_toBottomOf="@id/touch_imageview" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </layout>

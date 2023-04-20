@@ -24,6 +24,7 @@
     <string name="grant_permission">Please grant the application permission to continue using the app</string>
     <string name="all_video">All Video</string>
     <string name="all_image">All Image</string>
+    <string name="cast">Cast</string>
 
 
 </resources>

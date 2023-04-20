@@ -12,8 +12,8 @@
 
 
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" >@color/white</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor" >#020207</item>
+        <item name="android:windowLightStatusBar">false</item>
         <!-- Customize your theme here. -->
         <item name="android:actionBarStyle">@style/ToolbarStyle</item>
         <item name="android:windowContentTransitions">true</item>
@@ -30,6 +30,21 @@
     // rounded_corner image
     <style name="rounded_corner">
         <item name="cornerSize">10dp</item>
+    </style>
+
+    // rounded_corner image
+    <style name="rounded_corner_8">
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    // rounded_corner image
+    <style name="rounded_corner_7">
+        <item name="cornerSize">7dp</item>
+    </style>
+
+    // rounded_corner image
+    <style name="rounded_corner_6">
+        <item name="cornerSize">6dp</item>
     </style>
 
     //text Bold

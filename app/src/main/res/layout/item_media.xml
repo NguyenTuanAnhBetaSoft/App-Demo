@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        
+
         <variable
             name="isVideo"
             type="Boolean" />
@@ -23,30 +23,38 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgRoot"
-            app:layout_constraintTop_toTopOf="parent"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:bindThumbnailFile="@{item}"
             android:foreground="?selectableItemBackground"
-            app:layout_constraintDimensionRatio="1:1"
             android:scaleType="centerCrop"
-            android:bindThumbnailFile="@{item}" />
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iconCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:elevation="@dimen/dp_10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/video_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:elevation="@dimen/dp_4"
+            android:layout_marginEnd="3dp"
+            android:layout_marginBottom="3dp"
             android:background="@drawable/bg_duaration_video"
-            android:textColor="@color/white"
+            android:elevation="@dimen/dp_4"
             android:paddingStart="4dp"
             android:paddingEnd="5dp"
-            android:text="fdsfsdfsd"
+            android:textColor="@color/white"
             android:visibility="@{isVideo? View.VISIBLE:View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginBottom="3dp"
-            android:layout_marginEnd="3dp"
-             />
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
