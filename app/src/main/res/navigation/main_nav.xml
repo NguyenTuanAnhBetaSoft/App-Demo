@@ -51,9 +51,4 @@
             app:argType="integer" />
     </fragment>
     <action android:id="@+id/action_global_mediaFragment" app:destination="@id/allImageFragment"/>
-    <fragment
-        tools:layout="@layout/fragment_photo_cast"
-        android:id="@+id/photoCastFragment"
-        android:name="com.betasoft.appdemo.ui.photocast.PhotoCastFragment"
-        android:label="PhotoCastFragment" /><action android:id="@+id/action_global_photoCastFragment" app:destination="@id/photoCastFragment"/>
 </navigation>

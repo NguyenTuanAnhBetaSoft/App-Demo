@@ -1,6 +1,7 @@
 package com.betasoft.appdemo.ui.media
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -12,12 +13,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.betasoft.appdemo.MainActivity
 import com.betasoft.appdemo.R
+import com.betasoft.appdemo.data.model.CastMediaModel
 import com.betasoft.appdemo.data.model.MediaModel
 import com.betasoft.appdemo.databinding.FragmentMediaBinding
 import com.betasoft.appdemo.ui.adpter.MediaAdapter
 import com.betasoft.appdemo.ui.base.AbsBaseFragment
 import com.betasoft.appdemo.ui.home.HomeFragmentDirections
+import com.betasoft.appdemo.ui.photocast.PhotoCastActivity
 import com.betasoft.appdemo.utils.Utils
 import com.betasoft.appdemo.utils.bindThumbnailFile
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,7 +32,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MediaFragment : AbsBaseFragment<FragmentMediaBinding>() {
-    private var listItemSelected = mutableListOf<MediaModel>()
+    private var listItemSelected = arrayListOf<MediaModel>()
 
     private val args: MediaFragmentArgs by navArgs()
 
@@ -46,7 +50,18 @@ class MediaFragment : AbsBaseFragment<FragmentMediaBinding>() {
                     Utils.getStoragePermissions()
                 )
             } else {
+                when (args.param) {
 
+                    1 -> {
+                        binding.tvToolbar.text = "Videos"
+                        refreshDataVideo()
+                    }
+                    2 -> {
+                        refreshDataImage()
+                        binding.tvToolbar.text = "Photos"
+                    }
+
+                }
             }
         }
 
@@ -62,24 +77,17 @@ class MediaFragment : AbsBaseFragment<FragmentMediaBinding>() {
     override fun initView() {
         binding.viewModel = mViewModel
         onBackPressed()
-        when (args.param) {
 
-            1 -> {
-                binding.tvToolbar.text = "Videos"
-                refreshDataVideo()
-            }
-            2 -> {
-                refreshDataImage()
-                binding.tvToolbar.text = "Photos"
-            }
-
-        }
         observer()
 
         initRecycleView()
 
         binding.lPhotoSelected.btnCast.setOnClickListener {
-            findNavController().navigate(HomeFragmentDirections.actionGlobalPhotoCastFragment())
+
+            val intent = Intent((activity as MainActivity), PhotoCastActivity::class.java)
+            intent.putParcelableArrayListExtra("listMedia", listItemSelected)
+            startActivity(intent)
+
         }
 
         binding.toolbar.setNavigationOnClickListener {

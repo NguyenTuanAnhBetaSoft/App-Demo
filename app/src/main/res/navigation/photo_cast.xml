@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/photo_cast"
+    app:startDestination="@id/photoCastFragment2">
+
+    <fragment
+        tools:layout="@layout/fragment_photo_cast"
+        android:id="@+id/photoCastFragment2"
+        android:name="com.betasoft.appdemo.ui.photocast.PhotoCastFragment"
+        android:label="PhotoCastFragment" />
+</navigation>

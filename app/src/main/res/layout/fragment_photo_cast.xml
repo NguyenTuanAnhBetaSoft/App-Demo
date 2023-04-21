@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -8,22 +9,25 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:background="#020207"
         android:layout_height="match_parent"
-        android:background="#020207">
+     >
 
         <com.betasoft.appdemo.li.TouchImageView
             android:id="@+id/touch_imageview"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:scaleType="fitCenter"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="@dimen/dp_16"
             app:layout_constraintBottom_toTopOf="@id/rV"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/transparent"
+            android:layout_height="100dp"
+            android:background="#26020207"
+            app:buttonGravity="bottom"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_arrow">
 
@@ -31,17 +35,18 @@
                 android:id="@+id/tvToolbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="bottom|center"
+                android:layout_marginBottom="35dp"
+                android:text="sdfsdfsfsfsd"
                 android:textColor="@color/white" />
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rV"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginVertical="@dimen/dp_16"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/touch_imageview" />
+            android:layout_height="80dp"
+            android:layout_marginBottom="30dp"
+            app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

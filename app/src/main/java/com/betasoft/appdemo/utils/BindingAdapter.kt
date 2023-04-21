@@ -1,12 +1,18 @@
 package com.betasoft.appdemo.utils
 
+import android.graphics.Color
 import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.view.marginEnd
+import androidx.core.view.marginStart
+import androidx.core.view.setPadding
 import androidx.databinding.BindingAdapter
 import com.betasoft.appdemo.R
 import com.betasoft.appdemo.data.model.MediaModel
+import com.betasoft.appdemo.extensions.setMargin
 import com.betasoft.appdemo.li.TouchImageView
 import com.betasoft.appdemo.ui.base.popup.ActionModel
 import com.bumptech.glide.Glide
@@ -92,6 +98,20 @@ fun ImageView.iconForAction(actionModel: ActionModel) {
 
 }
 
+@BindingAdapter("android:setImageSelect")
+fun ShapeableImageView.setImageSelect(position:Int) {
+    this.strokeWidth = 10F
+    this.setStrokeColorResource(R.color.white)
+    this.setPadding(0)
+
+}
+
+@BindingAdapter("android:setImageUnSelect")
+fun ShapeableImageView.setImageUnSelect(position:Int) {
+    this.strokeWidth = 0F
+    this.setPadding(4,20,4,20)
+
+}
 
 
 
