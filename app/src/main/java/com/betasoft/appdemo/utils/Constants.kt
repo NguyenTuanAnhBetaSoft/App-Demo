@@ -1,7 +1,7 @@
 package com.betasoft.appdemo.utils
 
 import com.betasoft.appdemo.R
-import com.betasoft.appdemo.ui.base.popup.ActionModel
+import com.betasoft.appdemo.view.base.popup.ActionModel
 
 object Constants {
 

@@ -38,14 +38,14 @@
         </provider>
 
         <activity
-            android:name=".ui.photocast.PhotoCastActivity"
+            android:name=".view.activity.PhotoCastActivity"
             android:theme="@style/theme.FullScreen"
             android:exported="false" >
 
         </activity>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".view.activity.MainActivity"
             android:theme="@style/Theme.AppDemo"
             android:exported="true">
             <intent-filter>

@@ -8,6 +8,6 @@
     <fragment
         tools:layout="@layout/fragment_photo_cast"
         android:id="@+id/photoCastFragment2"
-        android:name="com.betasoft.appdemo.ui.photocast.PhotoCastFragment"
+        android:name="com.betasoft.appdemo.view.fragment.PhotoCastFragment"
         android:label="PhotoCastFragment" />
 </navigation>

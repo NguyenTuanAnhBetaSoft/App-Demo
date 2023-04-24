@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.betasoft.appdemo.ui.openart.HomeViewModel" />
+            type="com.betasoft.appdemo.view.viewmodel.HomeViewModel" />
 
         <import type="android.view.View" />
 

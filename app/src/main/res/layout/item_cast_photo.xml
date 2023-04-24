@@ -14,14 +14,16 @@
 
 
         <RelativeLayout
-            android:layout_width="60dp"
-            android:layout_height="60dp">
+            android:id="@+id/layout"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imgRoot"
-                android:layout_width="match_parent"
+                android:layout_width="60dp"
                 android:foreground="?attr/selectableItemBackground"
-                android:layout_height="match_parent"
+                android:layout_height="60dp"
                 android:bindThumbnailFile="@{item}"
                 android:scaleType="centerCrop" />
 

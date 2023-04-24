@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.betasoft.appdemo.ui.media.MediaLocalViewModel" />
+            type="com.betasoft.appdemo.view.viewmodel.MediaLocalViewModel" />
 
         <import type="android.view.View" />
     </data>

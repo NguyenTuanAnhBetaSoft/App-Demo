@@ -8,19 +8,19 @@
     <fragment
         tools:layout="@layout/fragment_splash"
         android:id="@+id/splashFragment"
-        android:name="com.betasoft.appdemo.ui.splash.SplashFragment"
+        android:name="com.betasoft.appdemo.view.fragment.SplashFragment"
         android:label="SplashFragment" />
     <fragment
         tools:layout="@layout/fragment_home"
         android:id="@+id/homeFragment"
-        android:name="com.betasoft.appdemo.ui.home.HomeFragment"
+        android:name="com.betasoft.appdemo.view.fragment.HomeFragment"
         android:label="HomeFragment" />
     <action android:id="@+id/action_global_homeFragment"
         app:destination="@id/homeFragment" />
     <fragment
         tools:layout="@layout/fragment_detail_image"
         android:id="@+id/detailImageFragment"
-        android:name="com.betasoft.appdemo.ui.detailImage.DetailImageFragment"
+        android:name="com.betasoft.appdemo.view.fragment.DetailImageFragment"
         android:label="DetailImageFragment" >
         <argument
             android:name="param"
@@ -31,7 +31,7 @@
     <fragment
         tools:layout="@layout/fragment_detail_image_local"
         android:id="@+id/detailImageLocalFragment"
-        android:name="com.betasoft.appdemo.ui.detailImagelocal.DetailImageLocalFragment"
+        android:name="com.betasoft.appdemo.view.fragment.DetailImageLocalFragment"
         android:label="DetailImageLocalFragment" >
 
         <argument
@@ -43,7 +43,7 @@
     <fragment
         tools:layout="@layout/fragment_media"
         android:id="@+id/allImageFragment"
-        android:name="com.betasoft.appdemo.ui.media.MediaFragment"
+        android:name="com.betasoft.appdemo.view.fragment.MediaFragment"
         android:label="AllImageFragment" >
 
         <argument
