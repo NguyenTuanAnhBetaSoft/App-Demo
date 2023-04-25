@@ -2,8 +2,10 @@ package com.betasoft.appdemo.view.fragment
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,10 +16,14 @@ import com.betasoft.appdemo.data.response.DataResponse
 import com.betasoft.appdemo.data.response.LoadingStatus
 import com.betasoft.appdemo.databinding.FragmentOpenArtBinding
 import com.betasoft.appdemo.utils.ToastUtils
+import com.betasoft.appdemo.utils.checknetwork.ConnectivityObserver
 import com.betasoft.appdemo.view.adpter.ImageAdapter
 import com.betasoft.appdemo.view.base.AbsBaseFragment
 import com.betasoft.appdemo.view.viewmodel.HomeViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
@@ -72,6 +78,8 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
     }
 
     override fun initView() {
+        observeCheckNetwork()
+
         onBackPressed()
         binding.viewModel = mViewModel
         observer()
@@ -241,6 +249,30 @@ class OpenArtFragment : AbsBaseFragment<FragmentOpenArtBinding>() {
         imageAdapter.setSelect(false)
         imageAdapter.notifyItemRangeChanged(0, listItemSelect.size)
         imageAdapter.cleanListItemChecked()
+    }
+
+    private fun observeCheckNetwork() {
+        lifecycleScope.launch {
+            mViewModel.networkObserve().collectLatest {
+                Log.d("545545", "${it.toString()}")
+                Snackbar.make(
+                        binding.layoutRoot,
+                        it.name,
+                        Snackbar.LENGTH_SHORT
+                    )
+                        .show()
+
+                when(it) {
+                    ConnectivityObserver.Status.Available -> {
+                        Log.d("545545", "co mang ne")
+                    }
+                    else ->{
+
+                    }
+
+                }
+            }
+        }
     }
 
 

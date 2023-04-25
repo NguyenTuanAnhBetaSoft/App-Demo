@@ -10,6 +10,7 @@ import com.betasoft.appdemo.data.model.MediaModel
 import com.betasoft.appdemo.data.repository.ImagesPagingSource
 import com.betasoft.appdemo.data.repository.VideosPagingSource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject

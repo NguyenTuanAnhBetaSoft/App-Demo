@@ -5,6 +5,7 @@ import android.content.ContentUris
 import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import com.betasoft.appdemo.App
 import com.betasoft.appdemo.data.model.MediaModel
 import com.betasoft.appdemo.di.AppContext
@@ -109,6 +110,10 @@ class MediaLoader @Inject constructor(
 
                     while (it.moveToNext() && it.position <= imagesOffset + imagesLimit) {
                         // Get values of columns for a given.
+                        Log.d("6565656", "imageoffset = $imagesOffset")
+                        Log.d("6565656", "imagesLimit = $imagesLimit")
+                        Log.d("6565656", "itMoveTonext = ${it.moveToNext()}")
+                        Log.d("6565656", "it.Position = ${it.position}")
 
                         val path = it.getString(pathColumn) ?: "Unknown"
                         val file = File(path)
@@ -137,6 +142,7 @@ class MediaLoader @Inject constructor(
                         list.add(mediaModel)
                     }
                     it.close()
+                    Log.d("6565656", "close")
                 }
 
             }

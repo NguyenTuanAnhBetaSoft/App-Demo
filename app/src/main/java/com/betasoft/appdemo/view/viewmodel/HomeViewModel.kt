@@ -2,6 +2,7 @@ package com.betasoft.appdemo.view.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.*
+import com.betasoft.appdemo.App
 import com.betasoft.appdemo.data.model.ImageLocal
 import com.betasoft.appdemo.data.model.ImageResult
 import com.betasoft.appdemo.data.api.responseremote.ItemsItem
@@ -9,17 +10,36 @@ import com.betasoft.appdemo.data.repository.LocalRepository
 import com.betasoft.appdemo.data.repository.RemoteRepository
 import com.betasoft.appdemo.data.response.DataResponse
 import com.betasoft.appdemo.data.response.LoadingStatus
+import com.betasoft.appdemo.di.AppContext
+import com.betasoft.appdemo.utils.checknetwork.ConnectivityObserver
+import com.betasoft.appdemo.utils.checknetwork.NetworkConnectivityObserver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val remoteRepository: RemoteRepository,
-    private val localRepository: LocalRepository
+    private val localRepository: LocalRepository,
+    @AppContext private val context: App
 ) :
     ViewModel() {
+
+    private val  networkConnectivityObserver = NetworkConnectivityObserver(context)
+
+    fun networkObserve(): Flow<ConnectivityObserver.Status> {
+        return flow {
+            networkConnectivityObserver.observe().collect{
+                emit(it)
+            }
+        }
+    }
+
+
     private var curPage = 1
     val dataAppLiveData = MutableLiveData<DataResponse<ImageResult>>(DataResponse.DataIdle())
 
