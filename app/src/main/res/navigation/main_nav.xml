@@ -51,4 +51,17 @@
             app:argType="integer" />
     </fragment>
     <action android:id="@+id/action_global_mediaFragment" app:destination="@id/allImageFragment"/>
+    <fragment
+
+        android:id="@+id/compressorFragment"
+        android:name="com.betasoft.appdemo.view.fragment.CompressorFragment"
+        android:label="fragment_compressor"
+        tools:layout="@layout/fragment_compressor" >
+        <argument
+            android:name="param"
+            app:argType="com.betasoft.appdemo.data.model.MediaModel"/>
+
+    </fragment>
+
+    <action android:id="@+id/action_global_compressorFragment" app:destination="@id/compressorFragment"/>
 </navigation>

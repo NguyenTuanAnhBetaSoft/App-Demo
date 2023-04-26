@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.io.File
 import java.io.IOException
 
 object DownloadUrl {
@@ -30,6 +31,34 @@ object DownloadUrl {
                     image.size
                 )
             }
+            if (haveSave) {
+                val filePath = ImageUtils.saveMediaToStorage(bitmap!!, nameFile!!, context)
+                result = filePath
+            }
+            return result
+        } catch (e: IOException) {
+            e.printStackTrace()
+            ""
+        }
+    }
+
+    fun saveImage(
+        file: File,
+        nameFile: String?,
+        haveSave: Boolean,
+        context: Context
+    ): String {
+        var result = ""
+        /*val builder = Request.Builder()
+        builder.url(url)
+        val request: Request = builder.build()*/
+        return try {
+           /* val response = client.newCall(request).execute()
+            val image = response.body!!.bytes()*/
+            var bitmap: Bitmap? = null
+            //if (image.isNotEmpty()) {
+                bitmap = BitmapFactory.decodeFile(file.absolutePath)
+            //}
             if (haveSave) {
                 val filePath = ImageUtils.saveMediaToStorage(bitmap!!, nameFile!!, context)
                 result = filePath

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="imgActual"
+            type="com.betasoft.appdemo.data.model.MediaModel" />
+
+        <variable
+            name="item"
+            type="com.betasoft.appdemo.data.model.MediaModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgActual"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="@dimen/dp_20"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgCompressed"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="@dimen/dp_20"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgActual"
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
+
+        <TextView
+            android:id="@+id/tvSizeActual"
+            app:layout_constraintTop_toBottomOf="@id/imgActual"
+            app:layout_constraintStart_toStartOf="@id/imgActual"
+            app:layout_constraintEnd_toEndOf="@id/imgActual"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvResolutionActual"
+            app:layout_constraintTop_toBottomOf="@id/tvSizeActual"
+            app:layout_constraintStart_toStartOf="@id/imgActual"
+            app:layout_constraintEnd_toEndOf="@id/imgActual"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvResolutionCompressed"
+            app:layout_constraintTop_toBottomOf="@id/tvSizeCompressed"
+            app:layout_constraintStart_toStartOf="@id/tvSizeCompressed"
+            app:layout_constraintEnd_toEndOf="@id/tvSizeCompressed"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvSizeCompressed"
+            app:layout_constraintTop_toBottomOf="@id/imgCompressed"
+            app:layout_constraintStart_toStartOf="@id/imgCompressed"
+            app:layout_constraintEnd_toEndOf="@id/imgCompressed"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btnCompressed"
+            app:layout_constraintTop_toBottomOf="@id/tvResolutionActual"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/dp_20"
+            android:text="Compress Image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btnDeleteCache"
+            app:layout_constraintTop_toBottomOf="@id/btnCompressed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/dp_20"
+            android:text="Delete Cache"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btnSaveImage"
+            app:layout_constraintTop_toBottomOf="@id/btnDeleteCache"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/dp_20"
+            android:text="Save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

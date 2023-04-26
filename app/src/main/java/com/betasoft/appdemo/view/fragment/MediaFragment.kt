@@ -150,7 +150,7 @@ class MediaFragment : AbsBaseFragment<FragmentMediaBinding>() {
         }
 
         mediaAdapter.onClickItem = {
-
+            findNavController().navigate(HomeFragmentDirections.actionGlobalCompressorFragment(it))
         }
 
         mediaAdapter.listSelected = {

@@ -1,9 +1,15 @@
 package com.betasoft.appdemo.view.fragment
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.util.Log
 import android.view.MotionEvent
+import android.widget.Toast
+import androidx.core.net.toFile
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.betasoft.appdemo.R
 import com.betasoft.appdemo.data.model.MediaModel
@@ -11,11 +17,20 @@ import com.betasoft.appdemo.databinding.FragmentPhotoCastBinding
 import com.betasoft.appdemo.view.adpter.CastPhotoAdapter
 import com.betasoft.appdemo.view.base.AbsBaseFragment
 import com.betasoft.appdemo.utils.bindTouchImage
+import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.format
+import id.zelory.compressor.constraint.quality
+import id.zelory.compressor.constraint.resolution
+import id.zelory.compressor.constraint.size
+import kotlinx.coroutines.launch
+import java.io.File
 
 
 class PhotoCastFragment : AbsBaseFragment<FragmentPhotoCastBinding>() {
 
     private val listMedia = arrayListOf<MediaModel>()
+
+    private var compressedImage: File? = null
 
     //private val args: PhotoCastFragmentArgs by navArgs()
 
@@ -24,6 +39,7 @@ class PhotoCastFragment : AbsBaseFragment<FragmentPhotoCastBinding>() {
             onClickItem = {
                 Log.d("t45454", "it = $it")
                 touchImageView(it)
+
 
             }
 
@@ -108,5 +124,7 @@ class PhotoCastFragment : AbsBaseFragment<FragmentPhotoCastBinding>() {
 
 
     }
+
+
 
 }
