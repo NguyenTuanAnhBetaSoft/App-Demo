@@ -3,13 +3,10 @@ package com.betasoft.appdemo.utils
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import android.view.View
 import com.betasoft.appdemo.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -102,8 +99,6 @@ object BitmapUtil {
         values.put(MediaStore.Images.Media.DATA, filepath.toString())
         return context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
     }
-
-
 
 
     fun <R> CoroutineScope.executeAsyncTask(

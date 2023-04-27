@@ -6,62 +6,80 @@
     app:startDestination="@id/splashFragment">
 
     <fragment
-        tools:layout="@layout/fragment_splash"
         android:id="@+id/splashFragment"
         android:name="com.betasoft.appdemo.view.fragment.SplashFragment"
-        android:label="SplashFragment" />
+        android:label="SplashFragment"
+        tools:layout="@layout/fragment_splash" />
     <fragment
-        tools:layout="@layout/fragment_home"
         android:id="@+id/homeFragment"
         android:name="com.betasoft.appdemo.view.fragment.HomeFragment"
-        android:label="HomeFragment" />
-    <action android:id="@+id/action_global_homeFragment"
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home" />
+    <action
+        android:id="@+id/action_global_homeFragment"
         app:destination="@id/homeFragment" />
     <fragment
-        tools:layout="@layout/fragment_detail_image"
         android:id="@+id/detailImageFragment"
         android:name="com.betasoft.appdemo.view.fragment.DetailImageFragment"
-        android:label="DetailImageFragment" >
+        android:label="DetailImageFragment"
+        tools:layout="@layout/fragment_detail_image">
         <argument
             android:name="param"
-            app:argType="com.betasoft.appdemo.data.api.responseremote.ItemsItem"/>
+            app:argType="com.betasoft.appdemo.data.api.responseremote.ItemsItem" />
 
     </fragment>
-    <action android:id="@+id/action_global_detailImageFragment" app:destination="@id/detailImageFragment"/>
+    <action
+        android:id="@+id/action_global_detailImageFragment"
+        app:destination="@id/detailImageFragment" />
     <fragment
-        tools:layout="@layout/fragment_detail_image_local"
         android:id="@+id/detailImageLocalFragment"
         android:name="com.betasoft.appdemo.view.fragment.DetailImageLocalFragment"
-        android:label="DetailImageLocalFragment" >
+        android:label="DetailImageLocalFragment"
+        tools:layout="@layout/fragment_detail_image_local">
 
         <argument
             android:name="param"
-            app:argType="com.betasoft.appdemo.data.model.ImageLocal"/>
+            app:argType="com.betasoft.appdemo.data.model.ImageLocal" />
     </fragment>
 
-    <action android:id="@+id/action_global_detailImageLocalFragment" app:destination="@id/detailImageLocalFragment" />
+    <action
+        android:id="@+id/action_global_detailImageLocalFragment"
+        app:destination="@id/detailImageLocalFragment" />
     <fragment
-        tools:layout="@layout/fragment_media"
         android:id="@+id/allImageFragment"
         android:name="com.betasoft.appdemo.view.fragment.MediaFragment"
-        android:label="AllImageFragment" >
+        android:label="AllImageFragment"
+        tools:layout="@layout/fragment_media">
 
         <argument
             android:name="param"
             app:argType="integer" />
     </fragment>
-    <action android:id="@+id/action_global_mediaFragment" app:destination="@id/allImageFragment"/>
+    <action
+        android:id="@+id/action_global_mediaFragment"
+        app:destination="@id/allImageFragment" />
     <fragment
 
         android:id="@+id/compressorFragment"
         android:name="com.betasoft.appdemo.view.fragment.CompressorFragment"
         android:label="fragment_compressor"
-        tools:layout="@layout/fragment_compressor" >
+        tools:layout="@layout/fragment_compressor">
         <argument
             android:name="param"
-            app:argType="com.betasoft.appdemo.data.model.MediaModel"/>
+            app:argType="com.betasoft.appdemo.data.model.CastMediaModel" />
 
     </fragment>
 
-    <action android:id="@+id/action_global_compressorFragment" app:destination="@id/compressorFragment"/>
+    <action
+        android:id="@+id/action_global_compressorFragment"
+        app:destination="@id/compressorFragment" />
+    <fragment
+        android:id="@+id/chooseCompressorFragment3"
+        android:name="com.betasoft.appdemo.view.fragment.ChooseCompressorFragment"
+        android:label="ChooseCompressorFragment"
+        tools:layout="@layout/fragment_choose_compressor" />
+    <action
+        android:id="@+id/action_global_chooseCompressorFragment3"
+        app:destination="@id/chooseCompressorFragment3" />
+
 </navigation>

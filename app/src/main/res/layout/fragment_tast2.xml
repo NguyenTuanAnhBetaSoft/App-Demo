@@ -32,5 +32,15 @@
             android:text="@string/all_image"
             android:layout_height="wrap_content"/>
 
+        <Button
+            android:id="@+id/btnChooseCompressed"
+            app:layout_constraintTop_toBottomOf="@id/btnAllImage"
+            android:layout_marginTop="@dimen/dp_10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:text="@string/choose_image"
+            android:layout_height="wrap_content"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

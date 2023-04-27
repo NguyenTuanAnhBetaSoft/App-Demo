@@ -5,30 +5,26 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
-import android.view.View
-import android.widget.Toast
-import androidx.core.net.toUri
 import androidx.exifinterface.media.ExifInterface
-
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.betasoft.appdemo.R
+import com.betasoft.appdemo.data.model.MediaModel
 import com.betasoft.appdemo.databinding.FragmentCompressorBinding
-import com.betasoft.appdemo.utils.BitmapUtil
-import com.betasoft.appdemo.utils.BitmapUtil.executeAsyncTask
 import com.betasoft.appdemo.utils.ToastUtils
 import com.betasoft.appdemo.utils.download.DownloadUrl
 import com.betasoft.appdemo.view.base.AbsBaseFragment
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.format
 import id.zelory.compressor.constraint.quality
-import id.zelory.compressor.constraint.resolution
 import id.zelory.compressor.constraint.size
 import id.zelory.compressor.loadBitmap
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import java.text.DecimalFormat
+import java.util.Date
 import kotlin.math.log10
 import kotlin.math.pow
 
@@ -36,35 +32,31 @@ class CompressorFragment : AbsBaseFragment<FragmentCompressorBinding>() {
     private val args: CompressorFragmentArgs by navArgs()
     private var compressedImage: File? = null
 
+    private val imagePathList = mutableListOf<MediaModel>()
+
+    private val compressedImagePathList = ArrayList<File?>()
+
+
     override fun getLayout(): Int {
         return R.layout.fragment_compressor
     }
 
     override fun initView() {
-        Log.d("54355435", "file = ${args.param.file.toString()}")
+        imagePathList.addAll(args.param.listMedeaModel)
+        Log.d("54355435", "file = ${imagePathList[0].toString()}")
         binding.btnCompressed.setOnClickListener {
-            lifecycleScope.launch {
-                compressedImage = Compressor.compress(requireContext(), args.param.file!!) {
-                    //resolution(1280, 720)
-                    resolution(150, 150)
-                    quality(50)
-                    format(Bitmap.CompressFormat.PNG)
-                    size(2_097_152) // 2 MB
-
-                    setCompressedImage()
-                }
-                if (this@CompressorFragment.compressedImage != null) {
-                    ToastUtils.getInstance(requireContext()).showToast("Compressed")
-                }
-                Log.d("54355435", "compressed = ${compressedImage.toString()}")
-            }
+            compressImageClick(true, 50)
         }
 
-        binding.imgActual.setImageBitmap(loadBitmap(args.param.file!!))
+        binding.imgActual.setImageBitmap(loadBitmap(imagePathList[0].file!!))
         binding.tvSizeActual.text =
-            String.format("Size : %s", getReadableFileSize(args.param.file!!.length()))
+            String.format(
+                "Size : %s",
+                getReadableFileSize(imagePathList[0].file!!.length())
+            )
 
-        binding.tvResolutionActual.text = "resolution: ${args.param.uri.getImageDimensions(requireContext())}"
+        binding.tvResolutionActual.text =
+            "resolution: ${imagePathList[0].uri.getImageDimensions(requireContext())}"
 
         binding.btnDeleteCache.setOnClickListener {
             lifecycleScope.launch {
@@ -75,7 +67,7 @@ class CompressorFragment : AbsBaseFragment<FragmentCompressorBinding>() {
         }
 
         binding.btnSaveImage.setOnClickListener {
-            saveImage()
+
         }
 
     }
@@ -118,7 +110,7 @@ class CompressorFragment : AbsBaseFragment<FragmentCompressorBinding>() {
 //        }
     }
 
-    fun Uri.getImageDimensions(context: Context): String {
+    private fun Uri.getImageDimensions(context: Context): String {
         val inputStream = context.contentResolver.openInputStream(this)!!
         val exif = ExifInterface(inputStream)
 
@@ -128,7 +120,7 @@ class CompressorFragment : AbsBaseFragment<FragmentCompressorBinding>() {
         return "$width, $height"
     }
 
-    private fun saveImage() {
+    private fun saveImage(file: File, isKeepImage: Boolean, quality: Int) {
         /*lifecycleScope.executeAsyncTask(onPreExecute = {
             //savingLayout.visibility = View.VISIBLE
         }, doInBackground = {
@@ -146,17 +138,72 @@ class CompressorFragment : AbsBaseFragment<FragmentCompressorBinding>() {
 
             }
         })*/
+        var fileName = ""
+        if (isKeepImage) {
+            val now = Date()
+            fileName = now.time.toString()
+        } else {
 
-        lifecycleScope.launch {
-            compressedImage?.let {
-                DownloadUrl.saveImage(
-                    it,
-                    "ahihihih",
-                    true,
-                    requireContext()
-                )
-            }
         }
+
+        DownloadUrl.saveImage(
+            quality,
+            file,
+            fileName,
+            true,
+            requireContext()
+        )
+
+
     }
+
+    private fun compressImageClick(isKeepImage: Boolean, quality: Int) {
+        var compressJob: Job? = null
+        try {
+            for (i in args.param.listMedeaModel) {
+                var file: File?
+
+                compressJob = lifecycleScope.launch {
+                    file = Compressor.compress(
+                        requireContext(),
+                        i.file!!
+                    ) {
+                        //destination(filePath.absoluteFile)
+                        //resolution(1280, 720)
+                        //calculateInSampleSize(BitmapFactory.Options(),50,50)
+                        //resolution(507, 675)
+                        //destination(file)
+                        quality(quality)
+                        format(Bitmap.CompressFormat.JPEG)
+                        size(2_097_152) // 2 MB
+
+                        setCompressedImage()
+
+                    }
+
+                    if (this@CompressorFragment.compressedImage != null) {
+                        compressedImagePathList.add(file)
+
+                    }
+                }
+                compressJob.invokeOnCompletion {
+                    for (c in compressedImagePathList) {
+                        c?.let {
+                            saveImage(it, isKeepImage, 50)
+                        }
+                    }
+
+
+                }
+            }
+
+
+        } catch (_: Exception) {
+
+        }
+
+
+    }
+
 
 }

@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import com.betasoft.appdemo.utils.Constants
 import com.betasoft.appdemo.utils.Utils
 import java.io.File
@@ -16,7 +15,7 @@ import java.io.OutputStream
 
 object ImageUtils {
 
-    fun saveMediaToStorage(bitmap: Bitmap, name: String, context: Context): String {
+    fun saveMediaToStorage(quality: Int, bitmap: Bitmap, name: String, context: Context): String {
         // Generating a file name
         var result = ""
         val filename = "${name}${Constants.TYPE_JPG}"
@@ -77,7 +76,7 @@ object ImageUtils {
 
         fos?.use {
             // Finally writing the bitmap to the output stream that we opened
-            bitmap.compress(Bitmap.CompressFormat.PNG, 80, it)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, it)
         }
         return result
     }

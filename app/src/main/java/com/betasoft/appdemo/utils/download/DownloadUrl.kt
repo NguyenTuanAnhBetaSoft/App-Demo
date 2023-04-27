@@ -12,6 +12,7 @@ object DownloadUrl {
     private var client = OkHttpClient()
 
     fun download(
+        quality: Int,
         url: String,
         nameFile: String?,
         haveSave: Boolean,
@@ -32,7 +33,7 @@ object DownloadUrl {
                 )
             }
             if (haveSave) {
-                val filePath = ImageUtils.saveMediaToStorage(bitmap!!, nameFile!!, context)
+                val filePath = ImageUtils.saveMediaToStorage(quality, bitmap!!, nameFile!!, context)
                 result = filePath
             }
             return result
@@ -43,24 +44,19 @@ object DownloadUrl {
     }
 
     fun saveImage(
+        quality: Int,
         file: File,
         nameFile: String?,
         haveSave: Boolean,
         context: Context
     ): String {
         var result = ""
-        /*val builder = Request.Builder()
-        builder.url(url)
-        val request: Request = builder.build()*/
         return try {
-           /* val response = client.newCall(request).execute()
-            val image = response.body!!.bytes()*/
             var bitmap: Bitmap? = null
-            //if (image.isNotEmpty()) {
-                bitmap = BitmapFactory.decodeFile(file.absolutePath)
+            bitmap = BitmapFactory.decodeFile(file.absolutePath)
             //}
             if (haveSave) {
-                val filePath = ImageUtils.saveMediaToStorage(bitmap!!, nameFile!!, context)
+                val filePath = ImageUtils.saveMediaToStorage(quality, bitmap!!, nameFile!!, context)
                 result = filePath
             }
             return result

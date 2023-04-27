@@ -37,7 +37,7 @@ class LocalRepository @Inject constructor(private val imageLocalDao: ImageLocalD
         context: Context
     ) = withContext(Dispatchers.IO) {
         try {
-            DownloadUrl.download(url, name, haveSave, context)
+            DownloadUrl.download(80,url, name, haveSave, context)
         } catch (ex: Exception) {
             return@withContext null
         }
@@ -52,6 +52,7 @@ class LocalRepository @Inject constructor(private val imageLocalDao: ImageLocalD
         try {
             item.forEachIndexed { _, itemsItem ->
                 val result = DownloadUrl.download(
+                    80,
                     itemsItem.image_url.toString(),
                     itemsItem.id.toString(),
                     haveSave,

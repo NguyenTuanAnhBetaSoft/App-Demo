@@ -1,7 +1,6 @@
 package com.betasoft.appdemo.view.fragment
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
@@ -9,35 +8,31 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.betasoft.appdemo.R
+import com.betasoft.appdemo.data.model.CastMediaModel
 import com.betasoft.appdemo.data.model.MediaModel
-import com.betasoft.appdemo.databinding.FragmentMediaBinding
+import com.betasoft.appdemo.databinding.FragmentChooseCompressorBinding
 import com.betasoft.appdemo.utils.Utils
 import com.betasoft.appdemo.utils.bindThumbnailFile
-import com.betasoft.appdemo.view.activity.MainActivity
-import com.betasoft.appdemo.view.activity.PhotoCastActivity
-import com.betasoft.appdemo.view.adpter.MediaAdapter
+import com.betasoft.appdemo.view.adpter.ChooseCompressorAdapter
 import com.betasoft.appdemo.view.base.AbsBaseFragment
-import com.betasoft.appdemo.view.viewmodel.MediaLocalViewModel
+import com.betasoft.appdemo.view.viewmodel.ChooseCompressorViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
-class MediaFragment : AbsBaseFragment<FragmentMediaBinding>() {
+class ChooseCompressorFragment : AbsBaseFragment<FragmentChooseCompressorBinding>() {
     private var listItemSelected = arrayListOf<MediaModel>()
 
-    private val args: MediaFragmentArgs by navArgs()
 
     @Inject
-    lateinit var mediaAdapter: MediaAdapter
+    lateinit var chooseCompressorAdapter: ChooseCompressorAdapter
 
-    private val mViewModel: MediaLocalViewModel by viewModels()
+    private val mViewModel: ChooseCompressorViewModel by viewModels()
 
     @SuppressLint("SetTextI18n")
     private val resultLauncher =
@@ -49,25 +44,14 @@ class MediaFragment : AbsBaseFragment<FragmentMediaBinding>() {
                     Utils.getStoragePermissions()
                 )
             } else {
-                when (args.param) {
-
-                    1 -> {
-                        binding.tvToolbar.text = "Videos"
-                        refreshDataVideo()
-                    }
-
-                    2 -> {
-                        refreshDataImage()
-                        binding.tvToolbar.text = "Photos"
-                    }
-
-                }
+                refreshDataImage()
+                binding.tvToolbar.text = getString(R.string.choose_image)
             }
         }
 
 
     override fun getLayout(): Int {
-        return R.layout.fragment_media
+        return R.layout.fragment_choose_compressor
     }
 
 
@@ -81,10 +65,11 @@ class MediaFragment : AbsBaseFragment<FragmentMediaBinding>() {
         initRecycleView()
 
         binding.lPhotoSelected.btnCast.setOnClickListener {
-
-            val intent = Intent((activity as MainActivity), PhotoCastActivity::class.java)
-            intent.putParcelableArrayListExtra("listMedia", listItemSelected)
-            startActivity(intent)
+            findNavController().navigate(
+                HomeFragmentDirections.actionGlobalCompressorFragment(
+                    CastMediaModel(listItemSelected)
+                )
+            )
 
         }
 
@@ -108,7 +93,7 @@ class MediaFragment : AbsBaseFragment<FragmentMediaBinding>() {
     private fun observer() {
         mViewModel.listItemSelectedLiveData.observe(this) {
             it?.let {
-                if (mediaAdapter.isSelect()) {
+                if (chooseCompressorAdapter.isSelect()) {
                     mViewModel.isSelect(true)
                     val total = it.size
                     binding.lPhotoSelected.tvPtSelected.text = "$total photos selected"
@@ -141,16 +126,17 @@ class MediaFragment : AbsBaseFragment<FragmentMediaBinding>() {
     private fun initRecycleView() {
         binding.rV.apply {
             setHasFixedSize(true)
-            adapter = mediaAdapter
+            adapter = chooseCompressorAdapter
             layoutManager =
                 GridLayoutManager(requireContext(), 4, LinearLayoutManager.VERTICAL, false)
 
         }
 
-        mediaAdapter.onClickItem = {
+        chooseCompressorAdapter.onClickItem = {
+            //findNavController().navigate(HomeFragmentDirections.actionGlobalCompressorFragment(it))
         }
 
-        mediaAdapter.listSelected = {
+        chooseCompressorAdapter.listSelected = {
             mViewModel.updateListItemSelected(it)
             listItemSelected.clear()
             listItemSelected.addAll(it)
@@ -161,15 +147,7 @@ class MediaFragment : AbsBaseFragment<FragmentMediaBinding>() {
     private fun refreshDataImage() {
         lifecycleScope.launch {
             mViewModel.fetAllImages().collectLatest { response ->
-                mediaAdapter.submitData(response)
-            }
-        }
-    }
-
-    private fun refreshDataVideo() {
-        lifecycleScope.launch {
-            mViewModel.fetAllVideos().collectLatest { response ->
-                mediaAdapter.submitData(response)
+                chooseCompressorAdapter.submitData(response)
             }
         }
     }
@@ -177,7 +155,7 @@ class MediaFragment : AbsBaseFragment<FragmentMediaBinding>() {
     private fun onBackPressed() {
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (mediaAdapter.isSelect()) {
+                if (chooseCompressorAdapter.isSelect()) {
                     updateUnSelect()
                 } else {
                     if (isAdded) {
@@ -193,9 +171,9 @@ class MediaFragment : AbsBaseFragment<FragmentMediaBinding>() {
     @SuppressLint("NotifyDataSetChanged")
     private fun updateUnSelect() {
         mViewModel.isSelect(false)
-        mediaAdapter.setSelect(false)
-        mediaAdapter.notifyDataSetChanged()
-        mediaAdapter.cleanListItemChecked()
+        chooseCompressorAdapter.setSelect(false)
+        chooseCompressorAdapter.notifyDataSetChanged()
+        chooseCompressorAdapter.cleanListItemChecked()
     }
 
 }

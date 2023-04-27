@@ -21,6 +21,10 @@ class Tast2Fragment : AbsBaseFragment<FragmentTast2Binding>() {
         binding.btnVideo.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.actionGlobalMediaFragment(1))
         }
+
+        binding.btnChooseCompressed.setOnClickListener {
+            findNavController().navigate(HomeFragmentDirections.actionGlobalChooseCompressorFragment3())
+        }
     }
 
 }
