@@ -52,7 +52,8 @@ constructor() : PagingDataAdapter<MediaModel, ChooseCompressorAdapter.MediaViewH
                         listItemChecked.add(media)
                         setSelect(true)
                         listSelected?.invoke(listItemChecked)
-                        notifyItemChanged(layoutPosition)
+                        //notifyItemChanged(layoutPosition)
+                        notifyItemRangeChanged(0, 80)
                         true
                     } else {
                         false
@@ -67,12 +68,15 @@ constructor() : PagingDataAdapter<MediaModel, ChooseCompressorAdapter.MediaViewH
 
             if (select) {
                 if (isChecked) {
-                    binding.iconCheck.setBackgroundResource(R.drawable.ic_check)
+                    binding.iconCheck.setBackgroundResource(R.drawable.ic_check_circle)
+
                 } else {
                     binding.iconCheck.setBackgroundResource(R.drawable.ic_radio_uncheck_white)
+
                 }
             } else {
-                binding.iconCheck.background = null
+                //binding.iconCheck.background = null
+
             }
 
             binding.imgRoot.setOnClickListener {
@@ -82,9 +86,7 @@ constructor() : PagingDataAdapter<MediaModel, ChooseCompressorAdapter.MediaViewH
                     } else {
                         listItemChecked.add(media)
                     }
-                    if (listItemChecked.isEmpty()) {
-                        setSelect(false)
-                    }
+
                     notifyItemChanged(layoutPosition)
                     listSelected?.invoke(listItemChecked)
                 } else {

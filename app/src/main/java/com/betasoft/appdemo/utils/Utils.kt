@@ -18,9 +18,13 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.exifinterface.media.ExifInterface
 import com.betasoft.appdemo.R
 import com.google.android.material.snackbar.Snackbar
+import java.text.DecimalFormat
 import java.util.*
+import kotlin.math.log10
+import kotlin.math.pow
 
 object Utils {
     fun isAndroidQ(): Boolean {
@@ -164,6 +168,25 @@ object Utils {
         } else {
             return connectivityManager.activeNetworkInfo?.isConnected ?: false
         }
+    }
+
+     fun getReadableFileSize(size: Long): String {
+        if (size <= 0) {
+            return "0"
+        }
+        val units = arrayOf("B", "KB", "MB", "GB", "TB")
+        val digitGroups = (log10(size.toDouble()) / log10(1024.0)).toInt()
+        return DecimalFormat("#,##0.#").format(size / 1024.0.pow(digitGroups.toDouble())) + " " + units[digitGroups]
+    }
+
+
+     fun Uri.getImageDimensions(context: Context): String {
+        val inputStream = context.contentResolver.openInputStream(this)!!
+        val exif = ExifInterface(inputStream)
+
+        val width = exif.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, 150)
+        val height = exif.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, 150)
+        return "$width, $height"
     }
 
 

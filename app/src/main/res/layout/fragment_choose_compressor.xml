@@ -35,6 +35,8 @@
             <TextView
                 android:id="@+id/tvToolbarSelectAll"
                 android:layout_width="wrap_content"
+                android:layout_marginEnd="@dimen/dp_10"
+                android:background="@drawable/my_ripple"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:textColor="@color/white" />

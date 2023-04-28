@@ -76,6 +76,10 @@ class ChooseCompressorFragment : AbsBaseFragment<FragmentChooseCompressorBinding
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+
+        binding.tvToolbarSelectAll.setOnClickListener {
+
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -118,6 +122,14 @@ class ChooseCompressorFragment : AbsBaseFragment<FragmentChooseCompressorBinding
                     imageRoot.visibility = View.VISIBLE
                     imageRoot.bindThumbnailFile(listItemSelected[listItemSelected.lastIndex - i])
                 }
+            }
+        }
+
+        mViewModel.isSelectALlLiveData.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.tvToolbarSelectAll.text = "Cancel"
+            } else {
+                binding.tvToolbarSelectAll.text = "Select All"
             }
         }
 

@@ -8,9 +8,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.betasoft.appdemo.data.model.MediaModel
 import com.betasoft.appdemo.data.repository.ImagesPagingSource
-import com.betasoft.appdemo.data.repository.VideosPagingSource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,8 +23,14 @@ class ChooseCompressorViewModel @Inject constructor(
 
     val isSelectLiveData = MutableLiveData(false)
 
+    val isSelectALlLiveData = MutableLiveData(false)
+
     fun isSelect(isSelect: Boolean) {
         isSelectLiveData.value = isSelect
+    }
+
+    fun isSelectAll(isSelectAll: Boolean) {
+        isSelectLiveData.value = isSelectAll
     }
 
     fun updateListItemSelected(list: List<MediaModel>) {
