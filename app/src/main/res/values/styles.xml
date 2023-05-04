@@ -16,5 +16,9 @@
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
+    <style name="DialogFullscreen" parent="Theme.AppDemo">
+        <item name="android:windowIsFloating">false</item>
+    </style>
+
 
 </resources>

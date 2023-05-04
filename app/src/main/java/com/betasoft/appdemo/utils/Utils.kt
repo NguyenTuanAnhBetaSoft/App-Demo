@@ -175,8 +175,8 @@ object Utils {
             return "0"
         }
         val units = arrayOf("B", "KB", "MB", "GB", "TB")
-        val digitGroups = (log10(size.toDouble()) / log10(1024.0)).toInt()
-        return DecimalFormat("#,##0.#").format(size / 1024.0.pow(digitGroups.toDouble())) + " " + units[digitGroups]
+        val digitGroups = (log10(size.toDouble()) / log10(1000.0)).toInt()
+        return DecimalFormat("#,##0.#").format(size / 1000.0.pow(digitGroups.toDouble())) + " " + units[digitGroups]
     }
 
 
@@ -188,6 +188,11 @@ object Utils {
         val height = exif.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, 150)
         return "$width, $height"
     }
+
+    inline fun <T> sdk29andUp(onSdk29 : () -> T) : T? =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) onSdk29()
+        else null
+
 
 
 }

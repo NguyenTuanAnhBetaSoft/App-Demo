@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -28,7 +30,9 @@ class ImagesPagingSource @Inject constructor(
             MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
             MediaStore.Images.Media.BUCKET_ID,
             MediaStore.Images.Media.DATE_MODIFIED,
-            MediaStore.Images.Media.DATA
+            MediaStore.Images.Media.DATA,
+            MediaStore.Images.Media.SIZE,
+            MediaStore.Images.Media.DATE_MODIFIED
         )
     private val cursor = when {
         Utils.isAndroidQ() -> {
@@ -59,6 +63,8 @@ class ImagesPagingSource @Inject constructor(
     private val pathColumn =
         cursor?.getColumnIndexOrThrow(projection[4])
     private val timeColumn = cursor?.getColumnIndexOrThrow(projection[3])
+    private val sizeColumn = cursor?.getColumnIndexOrThrow(projection[5])
+    private val dateColumn = cursor?.getColumnIndexOrThrow(projection[6])
 
     override fun getRefreshKey(state: PagingState<Int, MediaModel>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
@@ -108,13 +114,19 @@ class ImagesPagingSource @Inject constructor(
                     val albumName =
                         it.getString(albumNameColumn!!) ?: "Unknown"
                     val time = it.getLong(timeColumn!!)
+
+                    val imageSize = cursor.getLong(sizeColumn!!)
+                    val modifiedDate = cursor.getLong(dateColumn!!)
+                    val sdf = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
+                    val day = sdf.format(modifiedDate * 1000)
+
                     if (file.isHidden or file.isDirectory or !file.exists()) continue
 
                     val mediaModel = MediaModel(
-                        id, ContentUris.withAppendedId(
+                        id = id, uri = ContentUris.withAppendedId(
                             AppConfig.IMAGES_MEDIA_URI,
                             id
-                        ), name, albumId, albumName, time, file
+                        ), title = name, albumId = albumId, albumName = albumName, time = time, file = file, size = imageSize
                     ).apply {
                         duration = 0L
                     }

@@ -101,25 +101,39 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvResolutionActual" />
 
-        <Button
-            android:id="@+id/btnDeleteCache"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_20"
-            android:text="Delete Cache"
-            app:layout_constraintEnd_toEndOf="parent"
+        <CheckBox
+            android:id="@+id/checkBox"
+            app:layout_constraintTop_toBottomOf="@id/btnCompressed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnCompressed" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="keep the original image"
+            android:textSize="18sp"
+            android:padding="7dp"/>
+
+        <EditText
+            android:id="@+id/edtQuality"
+            app:layout_constraintTop_toBottomOf="@id/checkBox"
+            android:layout_marginTop="@dimen/dp_10"
+            android:inputType="number"
+            android:hint="Quality"
+            android:text="50%"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <Button
-            android:id="@+id/btnSaveImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_20"
-            android:text="Save"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/btnChangeQuality"
+            app:layout_constraintTop_toBottomOf="@id/edtQuality"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnDeleteCache" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="Change Quality"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

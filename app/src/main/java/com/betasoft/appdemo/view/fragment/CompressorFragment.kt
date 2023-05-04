@@ -1,7 +1,6 @@
 package com.betasoft.appdemo.view.fragment
 
 import androidx.activity.OnBackPressedCallback
-import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -11,13 +10,16 @@ import com.betasoft.appdemo.data.model.MediaModel
 import com.betasoft.appdemo.data.response.DataResponse
 import com.betasoft.appdemo.data.response.LoadingStatus
 import com.betasoft.appdemo.databinding.FragmentCompressorBinding
-import com.betasoft.appdemo.utils.Utils.getImageDimensions
+import com.betasoft.appdemo.utils.ToastUtils
 import com.betasoft.appdemo.utils.Utils.getReadableFileSize
 import com.betasoft.appdemo.view.adpter.CompressorAdapter
 import com.betasoft.appdemo.view.base.AbsBaseFragment
+import com.betasoft.appdemo.view.dialog.CompressDialog
 import com.betasoft.appdemo.view.viewmodel.CompressorViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
+@AndroidEntryPoint
 class CompressorFragment : AbsBaseFragment<FragmentCompressorBinding>() {
     private val args: CompressorFragmentArgs by navArgs()
 
@@ -38,28 +40,42 @@ class CompressorFragment : AbsBaseFragment<FragmentCompressorBinding>() {
         observe()
         onBackPressed()
         imagePathList.addAll(args.param.listMedeaModel)
-        mViewModel.test(imagePathList, true, 50, requireContext())
+        mViewModel.compressCache(imagePathList, 50)
 
         initRecycleView()
 
         binding.btnCompressed.setOnClickListener {
-            mViewModel.compressImages(imagePathListCompressed, true, 50, requireContext())
+            mViewModel.compressImages(
+                imagePathListCompressed,
+                binding.checkBox.isChecked
+            )
         }
 
-        binding.btnDeleteCache.setOnClickListener {
 
-        }
-
-        binding.btnSaveImage.setOnClickListener {
-        }
 
         compressAdapter.onViewPosition = {
             showInfoImage(it)
         }
 
         binding.toolbar.setNavigationOnClickListener {
-            mViewModel.deleteCache(requireContext())
+            //mViewModel.deleteCache(requireContext())
             findNavController().popBackStack()
+        }
+
+        binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+
+            } else {
+
+
+            }
+        }
+
+        binding.btnChangeQuality.setOnClickListener {
+            mViewModel.compressCache(
+                imagePathList,
+                binding.edtQuality.text.toString().toInt()
+            )
         }
 
     }
@@ -73,7 +89,7 @@ class CompressorFragment : AbsBaseFragment<FragmentCompressorBinding>() {
 
         }
 
-        compressAdapter.submitList(imagePathList)
+
     }
 
     private fun showInfoImage(int: Int) {
@@ -81,32 +97,39 @@ class CompressorFragment : AbsBaseFragment<FragmentCompressorBinding>() {
             "Size Actual : %s",
             getReadableFileSize(imagePathList[int].file!!.length())
         )
-        binding.tvResolutionActual.text =
-            buildString {
-                append("Resolution: ")
-                append(imagePathList[int].uri.getImageDimensions(requireContext()))
-            }
+//        binding.tvResolutionActual.text =
+//            buildString {
+//                append("Resolution: ")
+//                append(imagePathList[int].uri.getImageDimensions(requireContext()))
+//            }
 
         binding.tvSizeCompressed.text = String.format(
             "Size Compressed : %s",
             getReadableFileSize(imagePathListCompressed[int].length())
         )
-        binding.tvResolutionCompressed.text =
-            buildString {
-                append("Resolution: ")
-                append(imagePathListCompressed[int].toUri().getImageDimensions(requireContext()))
-            }
+//        binding.tvResolutionCompressed.text =
+//            buildString {
+//                append("Resolution: ")
+//                append(imagePathListCompressed[int].toUri().getImageDimensions(requireContext()))
+//            }
     }
 
     private fun observe() {
-        mViewModel.compressImageListLiveData.observe(viewLifecycleOwner) {
+        mViewModel.compressCacheImageListLiveData.observe(viewLifecycleOwner) {
             it?.let {
                 when (it.loadingStatus) {
                     LoadingStatus.Success -> {
                         val body = (it as DataResponse.DataSuccess).body
                         imagePathListCompressed.clear()
                         imagePathListCompressed.addAll(body!!)
+                        compressAdapter.submitList(imagePathList)
                         showInfoImage(0)
+                        ToastUtils.getInstance(requireContext()).showToast("Save cache success")
+
+                    }
+
+                    LoadingStatus.Loading -> {
+
                     }
 
                     LoadingStatus.Error -> {
@@ -121,13 +144,50 @@ class CompressorFragment : AbsBaseFragment<FragmentCompressorBinding>() {
 
         }
 
+        mViewModel.compressImageListLiveData.observe(viewLifecycleOwner) {
+            it?.let {
+                when (it.loadingStatus) {
+                    LoadingStatus.Success -> {
+                        val body = (it as DataResponse.DataSuccess).body
+                        ToastUtils.getInstance(requireContext()).showToast("image saved")
+                    }
+
+                    LoadingStatus.Loading -> {
+
+                    }
+
+                    LoadingStatus.Error -> {
+                        ToastUtils.getInstance(requireContext()).showToast("save fail")
+                    }
+
+                    else -> {
+
+                    }
+                }
+            }
+
+        }
+
 
     }
+
+    private fun createDialogCompress(key: ArrayList<String>) {
+        CompressDialog.create(key, object : CompressDialog.IListener {
+            override fun listenerAddFailed() {
+            }
+
+            override fun listenerDismissDialog() {
+            }
+
+            override fun listenSuccess() {
+            }
+        }).show(parentFragmentManager, "Compress Dialog")
+    }
+
 
     private fun onBackPressed() {
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                mViewModel.deleteCache(requireContext())
                 findNavController().popBackStack()
             }
 

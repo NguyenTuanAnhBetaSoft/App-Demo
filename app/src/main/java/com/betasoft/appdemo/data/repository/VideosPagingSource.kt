@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -29,7 +31,9 @@ class VideosPagingSource @Inject constructor(
             MediaStore.Video.Media.BUCKET_ID,
             MediaStore.Video.Media.DATE_MODIFIED,
             MediaStore.Video.Media.DATA,
-            MediaStore.Video.VideoColumns.DURATION
+            MediaStore.Video.VideoColumns.DURATION,
+            MediaStore.Images.Media.SIZE,
+            MediaStore.Images.Media.DATE_MODIFIED
         )
     private val cursor = when {
         Utils.isAndroidQ() -> {
@@ -61,6 +65,8 @@ class VideosPagingSource @Inject constructor(
         cursor?.getColumnIndexOrThrow(projection[4])
     private val timeColumn = cursor?.getColumnIndexOrThrow(projection[3])
     private val durationColumn = cursor?.getColumnIndexOrThrow(projection[5])
+    private val sizeColumn = cursor?.getColumnIndexOrThrow(projection[6])
+    private val dateColumn = cursor?.getColumnIndexOrThrow(projection[7])
 
 
     override fun getRefreshKey(state: PagingState<Int, MediaModel>): Int? {
@@ -110,16 +116,22 @@ class VideosPagingSource @Inject constructor(
                     val albumName =
                         it.getString(albumNameColumn!!) ?: "Unknown"
                     val time = it.getLong(timeColumn!!)
+
+                    val imageSize = cursor.getLong(sizeColumn!!)
+                    val modifiedDate = cursor.getLong(dateColumn!!)
+                    val sdf = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
+                    val day = sdf.format(modifiedDate * 1000)
+
                     val durationVid = if (durationColumn != null) {
                         it.getLong(durationColumn)
                     } else 0L
                     if (file.isHidden or file.isDirectory or !file.exists() or (durationVid == 0L)) continue
 
                     val mediaModel = MediaModel(
-                        id, ContentUris.withAppendedId(
+                        id = id, uri = ContentUris.withAppendedId(
                             AppConfig.VIDEO_MEDIA_URI,
                             id
-                        ), name, albumId, albumName, time, file
+                        ), title = name, albumId = albumId, albumName = albumName, time = time, file = file, size = imageSize
                     ).apply {
                         duration = durationVid
                     }
