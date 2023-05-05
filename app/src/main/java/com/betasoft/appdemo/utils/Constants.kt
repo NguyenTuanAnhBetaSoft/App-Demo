@@ -4,6 +4,7 @@ import com.betasoft.appdemo.R
 import com.betasoft.appdemo.view.base.popup.ActionModel
 
 object Constants {
+    const val MY_DIR_ENCRYPT = "/sdcard/.bs/file/Pictures"
 
     const val APP_NAME = "App Demo"
     const val PROVIDER = ".provider"

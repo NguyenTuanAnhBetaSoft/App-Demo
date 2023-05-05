@@ -1,6 +1,10 @@
 package com.betasoft.appdemo.view.viewmodel
 
+import android.app.RecoverableSecurityException
 import android.content.Context
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,6 +20,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 
@@ -44,14 +49,14 @@ class CompressorViewModel @Inject constructor(
     }
 
     fun compressCache(
-        listImage: List<MediaModel>,
+        listImageRoot: List<MediaModel>,
         quality: Int
     ) {
         compressCacheImageListLiveData.value = DataResponse.DataLoading(LoadingStatus.Loading)
         compressCacheJob = viewModelScope.launch {
             try {
                 File(context.cacheDir, "compressor").deleteRecursively()
-                val result = compressRepository.compressCache(listImage, quality)
+                val result = compressRepository.compressCache(listImageRoot, quality)
                 if (result!!.isNotEmpty()) {
                     compressCacheImageListLiveData.postValue(
                         DataResponse.DataSuccess(
@@ -68,16 +73,17 @@ class CompressorViewModel @Inject constructor(
     }
 
     fun compressImages(
-        imagePathList: List<File>,
-        isKeepImage: Boolean
+        listImageCache: List<File>,
+        isKeepImage: Boolean,
+        listImageRoot: List<MediaModel>
     ) {
         compressImageListLiveData.value = DataResponse.DataLoading(LoadingStatus.Loading)
+
         compressJob = viewModelScope.launch(Dispatchers.Default) {
             try {
-                Log.d("434343", "compressImgPahtList = $imagePathList")
-                for (c in imagePathList) {
+                listImageCache.forEachIndexed { index, file ->
                     StorageUtils().saveImage(
-                        context = context, image = c, isKeepImage = isKeepImage
+                        context = context, image = file, isKeepImage = isKeepImage, rootFile = listImageRoot[index].file!!
                     )
                 }
                 compressImageListLiveData.postValue(DataResponse.DataSuccess(true))

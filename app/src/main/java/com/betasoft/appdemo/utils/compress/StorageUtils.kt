@@ -2,11 +2,13 @@ package com.betasoft.appdemo.utils.compress
 
 import android.content.ContentValues
 import android.content.Context
+import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.provider.MediaStore.Images.Media
 import android.util.Log
 import com.betasoft.appdemo.R
+import com.betasoft.appdemo.utils.Constants.MY_DIR_ENCRYPT
 import com.betasoft.appdemo.utils.Utils.sdk29andUp
 import okio.use
 import java.io.File
@@ -151,16 +153,19 @@ class StorageUtils {
 
     }*/
 
-    fun saveImage(context: Context, image: File, isKeepImage: Boolean) {
+    fun saveImage(
+        context: Context,
+        image: File,
+        isKeepImage: Boolean,
+        rootFile: File,
+    ) {
         Log.d("4343", "file : ${image.toString()}")
         Log.d("4343fdfdfdfd", "iskeepimage : $isKeepImage")
         sdk29andUp {
             try {
                 val collection = Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-                var path = Environment.DIRECTORY_PICTURES + "/" + context.getString(R.string.app_name)
-
-                if (isKeepImage) {
-                }
+                val path =
+                    Environment.DIRECTORY_PICTURES + "/" + context.getString(R.string.app_name)
 
                 val values = ContentValues().apply {
                     put(Media.DISPLAY_NAME, image.name)
@@ -181,6 +186,12 @@ class StorageUtils {
                     }
                     println(uri)
                 } ?: throw IOException("Error creating entry in MediaStore")
+
+                if (!isKeepImage) {
+                    val name: List<String> = rootFile.name.split(".")
+                    File("/sdcard/.bs/file/Pictures", name[0]).delete()
+                    Log.d("53545", "name: ${name.toString()}")
+                }
             } catch (e: IOException) {
                 e.printStackTrace()
             } catch (e: IllegalArgumentException) {
@@ -188,10 +199,10 @@ class StorageUtils {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-        } ?: saveImageBefore29(context, image, isKeepImage)
+        } ?: saveImageBefore29(context, image, isKeepImage, rootFile)
     }
 
-    private fun saveImageBefore29(context: Context, image: File, isKeepImage: Boolean) {
+    private fun saveImageBefore29(context: Context, image: File, isKeepImage: Boolean, rootFile: File) {
         try {
             val resolver = context.contentResolver
             val collection = Media.EXTERNAL_CONTENT_URI
@@ -221,6 +232,11 @@ class StorageUtils {
                         outputStream.write(buffer, 0, length)
                 }
             } ?: throw IOException("Error Writing to MediaStore")
+            if (!isKeepImage) {
+                val name: List<String> = rootFile.name.split(".")
+                File(MY_DIR_ENCRYPT, name[0]).delete()
+                Log.d("53545", "name: ${name.toString()}")
+            }
         } catch (e: IOException) {
             e.printStackTrace()
         } catch (e: IllegalArgumentException) {
@@ -229,4 +245,6 @@ class StorageUtils {
             e.printStackTrace()
         }
     }
+
+
 }

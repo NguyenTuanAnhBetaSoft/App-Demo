@@ -25,8 +25,8 @@ class CompressorFragment : AbsBaseFragment<FragmentCompressorBinding>() {
 
     private val mViewModel: CompressorViewModel by viewModels()
 
-    private val imagePathList = mutableListOf<MediaModel>()
-    private val imagePathListCompressed = mutableListOf<File>()
+    private val imagePathListRoot = mutableListOf<MediaModel>()
+    private val imagePathListCache = mutableListOf<File>()
 
     private val compressAdapter by lazy {
         CompressorAdapter()
@@ -37,17 +37,19 @@ class CompressorFragment : AbsBaseFragment<FragmentCompressorBinding>() {
     }
 
     override fun initView() {
+
         observe()
         onBackPressed()
-        imagePathList.addAll(args.param.listMedeaModel)
-        mViewModel.compressCache(imagePathList, 50)
+        imagePathListRoot.addAll(args.param.listMedeaModel)
+        mViewModel.compressCache(imagePathListRoot, 50)
 
         initRecycleView()
 
         binding.btnCompressed.setOnClickListener {
             mViewModel.compressImages(
-                imagePathListCompressed,
-                binding.checkBox.isChecked
+                listImageCache = imagePathListCache,
+                isKeepImage = binding.checkBox.isChecked,
+                listImageRoot = imagePathListRoot
             )
         }
 
@@ -73,7 +75,7 @@ class CompressorFragment : AbsBaseFragment<FragmentCompressorBinding>() {
 
         binding.btnChangeQuality.setOnClickListener {
             mViewModel.compressCache(
-                imagePathList,
+                imagePathListRoot,
                 binding.edtQuality.text.toString().toInt()
             )
         }
@@ -95,7 +97,7 @@ class CompressorFragment : AbsBaseFragment<FragmentCompressorBinding>() {
     private fun showInfoImage(int: Int) {
         binding.tvSizeActual.text = String.format(
             "Size Actual : %s",
-            getReadableFileSize(imagePathList[int].file!!.length())
+            getReadableFileSize(imagePathListRoot[int].file!!.length())
         )
 //        binding.tvResolutionActual.text =
 //            buildString {
@@ -105,7 +107,7 @@ class CompressorFragment : AbsBaseFragment<FragmentCompressorBinding>() {
 
         binding.tvSizeCompressed.text = String.format(
             "Size Compressed : %s",
-            getReadableFileSize(imagePathListCompressed[int].length())
+            getReadableFileSize(imagePathListCache[int].length())
         )
 //        binding.tvResolutionCompressed.text =
 //            buildString {
@@ -120,9 +122,9 @@ class CompressorFragment : AbsBaseFragment<FragmentCompressorBinding>() {
                 when (it.loadingStatus) {
                     LoadingStatus.Success -> {
                         val body = (it as DataResponse.DataSuccess).body
-                        imagePathListCompressed.clear()
-                        imagePathListCompressed.addAll(body!!)
-                        compressAdapter.submitList(imagePathList)
+                        imagePathListCache.clear()
+                        imagePathListCache.addAll(body!!)
+                        compressAdapter.submitList(imagePathListRoot)
                         showInfoImage(0)
                         ToastUtils.getInstance(requireContext()).showToast("Save cache success")
 
