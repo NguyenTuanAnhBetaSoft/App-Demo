@@ -10,6 +10,7 @@ import com.betasoft.appdemo.data.model.MediaModel
 import com.betasoft.appdemo.extensions.setMargin
 import com.betasoft.appdemo.utils.li.TouchImageView
 import com.betasoft.appdemo.view.base.popup.ActionModel
+import com.betasoft.appdemo.view.fragment.searchphoto.PhotoCompression
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
@@ -116,6 +117,24 @@ fun ShapeableImageView.setImageUnSelect(position:Int) {
 
 
 }
+
+@BindingAdapter("android:bindImageCompression")
+fun ImageView.bindImageCompression(mediaModel: PhotoCompression?) {
+    if (mediaModel != null) {
+        Glide.with(this).load(mediaModel.file)
+            //.placeholder(R.drawable.loading_image_animation)
+            .error(R.drawable.ic_thumb_image)
+            .into(this)
+    } else {
+        Glide.with(this).load(R.drawable.ic_thumb_image)
+            .error(R.drawable.ic_thumb_image)
+            .placeholder(R.drawable.ic_thumb_image)
+            .into(this)
+    }
+}
+
+
+
 
 
 

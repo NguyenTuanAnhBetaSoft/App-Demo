@@ -41,7 +41,7 @@ class ImagesPagingSource @Inject constructor(
                 null,
                 null,
                 null,
-                "date_added DESC"
+                "_size DESC"
             )
         }
 
@@ -51,7 +51,7 @@ class ImagesPagingSource @Inject constructor(
                 projection,
                 null,
                 null,
-                "date_added DESC"
+                "_size DESC"
             )
         }
     }

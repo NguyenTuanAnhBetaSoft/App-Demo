@@ -25,6 +25,14 @@ class Tast2Fragment : AbsBaseFragment<FragmentTast2Binding>() {
         binding.btnChooseCompressed.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.actionGlobalChooseCompressorFragment3())
         }
+
+        binding.btnSearchPhoto.setOnClickListener {
+            findNavController().navigate(HomeFragmentDirections.actionGlobalSearchPhotoFragment())
+        }
+
+        binding.btnAlbum.setOnClickListener {
+            findNavController().navigate(HomeFragmentDirections.actionGlobalAlbumFragment())
+        }
     }
 
 }

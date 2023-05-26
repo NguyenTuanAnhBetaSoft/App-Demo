@@ -81,5 +81,31 @@
     <action
         android:id="@+id/action_global_chooseCompressorFragment3"
         app:destination="@id/chooseCompressorFragment3" />
+    <fragment
+        tools:layout="@layout/fragment_test"
+        android:id="@+id/testFragment"
+        android:name="com.betasoft.appdemo.view.fragment.TestFragment"
+        android:label="TestFragment" /><action android:id="@+id/action_global_testFragment" app:destination="@id/testFragment"/>
+    <fragment
+        tools:layout="@layout/fragment_search_photo"
+        android:id="@+id/searchPhotoFragment"
+        android:name="com.betasoft.appdemo.view.fragment.searchphoto.SearchPhotoFragment"
+        android:label="SearchPhotoFragment" /><action android:id="@+id/action_global_searchPhotoFragment" app:destination="@id/searchPhotoFragment"/>
+    <fragment
+        tools:layout="@layout/fragment_album"
+        android:id="@+id/albumFragment"
+        android:name="com.betasoft.appdemo.view.fragment.album.AlbumFragment"
+        android:label="AlbumFragment" />
+    <action android:id="@+id/action_global_albumFragment" app:destination="@id/albumFragment" />
+    <fragment
+        tools:layout="@layout/fragment_detail_album"
+        android:id="@+id/detailAlbumFragment"
+        android:name="com.betasoft.appdemo.view.fragment.detailalbum.DetailAlbumFragment"
+        android:label="DetailAlbumFragment" >
+        <argument
+            android:name="bucketId"
+            app:argType="long" />
+    </fragment>
+    <action android:id="@+id/action_global_detailAlbumFragment" app:destination="@id/detailAlbumFragment" />
 
 </navigation>

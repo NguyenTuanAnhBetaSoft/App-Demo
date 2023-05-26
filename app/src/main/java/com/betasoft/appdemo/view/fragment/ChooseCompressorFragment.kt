@@ -93,6 +93,10 @@ class ChooseCompressorFragment : AbsBaseFragment<FragmentChooseCompressorBinding
 
         }
 
+        binding.tvToolbar.setOnClickListener {
+            findNavController().navigate(HomeFragmentDirections.actionGlobalTestFragment())
+        }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
